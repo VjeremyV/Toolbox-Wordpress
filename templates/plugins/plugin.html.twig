@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Plugins Wordpress
+{% endblock %}
+
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/plugin.css')}}" rel="stylesheet"/>
+
+{% endblock %}
+
+{% block body %}
+	<h1 class="text-center pb-5">Plugins Wordpress</h1>
+
+<div class="container mt-5">
+	<div class="card">
+		<h5 class="card-header">Auto-Featured-Imgs</h5>
+		<div class="card-body row">
+        <div class="col-md-4">
+			<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+			<a href="{{ asset('plugins/Auto-Featured-Imgs.zip')}}" class="btn btn-primary">Télécharger</a>
+        </div>
+        <div class="col-md-8 plugImgs">
+        <img src="{{ asset('assets/img/plugins/Auto-Featured-Imgs.PNG')}}" alt=""></div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+
+{% block javascripts %}{% endblock %}
