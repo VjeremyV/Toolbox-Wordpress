@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Extracteurs d'images
+{% endblock %}
+
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/extracteur-images.css')}}" rel="stylesheet"/>
+
+{% endblock %}
+
+{% block body %}
+
+
+	<h1 class="text-center">Extraction des images d'articles wordpress</h1>
+	<h2 class="text-center font-italic mb-5">Ici on récupère les médias attachés aux articles d'un Wordpress</h2>
+	{# on affiche le formulaire pour envoyer un fichier #}
+		{{ form_start(form) }}
+	<div id="inputContainer">
+		{{ form_row(form.nom_blog) }}
+		<div id="matchList"></div>
+	</div>
+	<div id="linkContainer">
+		{{ form_row(form.xmlArticlesWP) }}
+	</div>
+	{{ form_end(form) }}
+	<div id='response_container'></div>
+		{# {% if xml is defined and xml != ""%}
+			{{dump(xml)}}
+	
+		{% endif %} #}
+		{# {% if imgs_urls is defined and imgs_urls != ""%}
+			{{dump(imgs_urls)}}
+	
+		{% endif %}
+		{% if dossier is defined and dossier != ""%}
+			{{dump(dossier)}}
+	
+		{% endif %} #}
+
+
+
+	{% endblock %}
+	{% block javascripts %}
+
+		<script type="text/javascript">
+			let xml = {{ xml|json_encode()|raw }};
+		</script>
+		//
+		<script type="module" src="{{ asset('assets/js/extracteur-images.js')}}"></script>
+	{% endblock %}

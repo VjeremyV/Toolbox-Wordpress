@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Spinnerman : du Français à l'anglais, le tout spinné
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/spinnerman.css')}}" rel="stylesheet"/>
+
+{% endblock %}
+
+{% block body %}
+
+
+	<h1 class="text-center">Spinnerman</h1>
+	<h2 class="text-center font-italic mb-5">Un texte Français donné, un texte anglais spinné offert</h2>
+
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" href="{{path('app_spinnerman')}}">Traduire et Spinner</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{{path('app_spinnerman_existing_blog')}}">Spinner depuis une traduction</a>
+  </li>
+</ul>
+
+	{# on affiche le formulaire pour envoyer un fichier #}
+	{{ form_start(NewFileForm) }}
+	<div id="inputContainer">
+		{{ form_row(NewFileForm.nom_blog) }}
+		<div id="matchList"></div>
+	</div>
+	<div id="linkContainer">
+		{{ form_row(NewFileForm.xmlArticlesWP) }}
+	</div>
+	{{ form_end(NewFileForm) }}
+	<div class="progressContainer">
+		<div class="translateProgress text-center m-4"></div>
+		<div class="spinProgress text-center m-4"></div>
+		<div class="makeFileProgress text-center m-4"></div>
+	</div>
+	<div id='spider_container'></div>
+
+
+
+{% endblock %}
+{% block javascripts %}
+
+	<script type="text/javascript">
+		let xml = {{ xml|json_encode()|raw }};
+	</script>
+	//
+	<script type="module" src="{{ asset('assets/js/spinnerman.js')}}"></script>
+{% endblock %}
