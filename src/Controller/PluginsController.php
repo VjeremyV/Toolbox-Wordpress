@@ -11,8 +11,6 @@ class PluginsController extends AbstractController
     #[Route('/plugins', name: 'app_plugins')]
     public function index(): Response
     {
-        return $this->render('plugins/plugin.html.twig', [
-            'controller_name' => 'PluginsController',
-        ]);
+        return $this->render('plugins/plugin.html.twig');
     }
 }
