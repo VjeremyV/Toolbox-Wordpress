@@ -47,11 +47,17 @@
 					</li>
 					<li class="nav-item">
 						<a class="nav-link text-white justify-content-center" href="{{path('app_plugins')}}">
-							<span class="nav-link-text ms-1" id="{{ (app.request.get('_route') == 'app_extracteur_images') ? 'currentMenuSelected' : ''}}">Plugins</span>
+							<span class="nav-link-text ms-1" id="{{ (app.request.get('_route') == 'app_plugins') ? 'currentMenuSelected' : ''}}">Plugins</span>
 						</a>
 					</li>
 
-
+					{% if app.user.roles[0] == "ROLE_ADMIN" %}
+						<li class="nav-item">
+						<a class="nav-link text-white justify-content-center" href="{{path('app_administration')}}">
+							<span class="nav-link-text ms-1" id="{{ (app.request.get('_route') == 'app_administration') ? 'currentMenuSelected' : ''}}">Administration</span>
+						</a>
+					</li>
+					{% endif %}
 				</ul>
 			</div>
 		</aside>

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration
+{% endblock %}
+
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/administration.css')}}" rel="stylesheet"/>
+
+{% endblock %}
+{% block body %}
+	<h1 class="text-center">Administration</h1>
+
+<h2 class="accordion">Ajouter collaborateur</h2>
+<div class="panel">
+<form action="">
+<label for="name"></label>
+<input type="text" name="name" id="name">
+<input type="submit" value="Envoyer">
+</form>
+</div>
+{% endblock %}
+
+
+{% block javascripts %}
+
+	<script src="{{ asset('assets/js/accordion.js')}}" type="text/javascript"></script>
+{% endblock %}
