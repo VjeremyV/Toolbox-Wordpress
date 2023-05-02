@@ -10,19 +10,48 @@
 {% endblock %}
 {% block body %}
 	<h1 class="text-center">Administration</h1>
+	<section>
+		<h2>Ajouter un collaborateur</h2>
+		{% for r in role %}
+		{{ r }}
+		{% endfor %}
+		{{ form_start(form, {'attr': {'id': 'addCollab'}}) }}
+		{{ form_end(form) }}
 
-<h2 class="accordion">Ajouter collaborateur</h2>
-<div class="panel">
-<form action="">
-<label for="name"></label>
-<input type="text" name="name" id="name">
-<input type="submit" value="Envoyer">
-</form>
-</div>
+	</section>
+	<section>
+		<h2>Collaborateurs enregistrés</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Nom</th>
+					<th>Prénom</th>
+					<th>Email</th>
+					<th>Rôle</th>
+					<th>Actions</th>
+				</tr>
+
+			</thead>
+			{% for user in users %}
+				<tr>
+					<td>{{user.nom}}</td>
+					<td>{{user.prenom}}</td>
+					<td>{{user.email}}</td>
+					<td>
+						{% if user.roles[0] == "ROLE_ADMIN" %}
+							Admin
+						{% elseif user.roles[0] == "ROLE_USER" %}
+							Collaborateur
+						{% endif %}
+					</td>
+					<td>
+						<i class="fa-solid fa-pen clickIcon" data-UpdId="{{user.id}}" title="modifier"></i>
+						<i class="fa-sharp fa-solid fa-circle-xmark clickIcon" data-DelId="{{user.id}}" title="supprimer"></i>
+					</td>
+				</tr>
+				{{dump(user)}}
+			{% endfor %}
+		</table>
+	</section>
 {% endblock %}
-
-
-{% block javascripts %}
-
-	<script src="{{ asset('assets/js/accordion.js')}}" type="text/javascript"></script>
-{% endblock %}
+{% block javascripts %}{% endblock %}

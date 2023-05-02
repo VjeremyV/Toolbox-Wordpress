@@ -23,3 +23,33 @@
     display: none;
     overflow: hidden;
   }
+
+  section {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .clickIcon{
+    cursor: pointer;
+  }
+  tr {
+    border: 1px solid black;
+  }
+
+  td, th {
+    padding: 20px;
+    text-align: center;
+  }
+
+  #addCollab{
+    display: flex;
+    align-items: center;
+  }
+
+  #addCollab div{
+    padding: 10px;
+    display: flex ;
+    align-items: center;
+  }
