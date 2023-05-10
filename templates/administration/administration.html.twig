@@ -6,6 +6,7 @@
 
 {% block stylesheets %}
 	<link rel="stylesheet" href="{{ asset('assets/css/administration.css')}}" rel="stylesheet"/>
+	<link rel="stylesheet" href="{{ asset('assets/css/modal.css')}}" rel="stylesheet"/>
 
 {% endblock %}
 {% block body %}
@@ -13,7 +14,7 @@
 	<section>
 		<h2>Ajouter un collaborateur</h2>
 		{% for r in role %}
-		{{ r }}
+			{{ r }}
 		{% endfor %}
 		{{ form_start(form, {'attr': {'id': 'addCollab'}}) }}
 		{{ form_end(form) }}
@@ -33,25 +34,60 @@
 
 			</thead>
 			{% for user in users %}
+
 				<tr>
-					<td>{{user.nom}}</td>
-					<td>{{user.prenom}}</td>
-					<td>{{user.email}}</td>
-					<td>
+
+					<td class="nom-{{user.id}}">{{user.nom}}</td>
+					<td class="prenom-{{user.id}}">{{user.prenom}}</td>
+					<td class="email-{{user.id}}">{{user.email}}</td>
+					<td class="roles-{{user.id}}">
 						{% if user.roles[0] == "ROLE_ADMIN" %}
 							Admin
 						{% elseif user.roles[0] == "ROLE_USER" %}
 							Collaborateur
 						{% endif %}
+
 					</td>
 					<td>
-						<i class="fa-solid fa-pen clickIcon" data-UpdId="{{user.id}}" title="modifier"></i>
-						<i class="fa-sharp fa-solid fa-circle-xmark clickIcon" data-DelId="{{user.id}}" title="supprimer"></i>
+						<i class="fa-solid fa-pen clickIcon" data-toggle="modal" data-target='#modal-1' data-updid="{{user.id}}" title="modifier"></i>
+						<a href="{{ path('app_admin_supp', {id : user.id})}}">
+							<i class="fa-sharp fa-solid fa-circle-xmark clickIcon" data-delid="{{user.id}}" title="supprimer"></i>
+						</a>
 					</td>
 				</tr>
-				{{dump(user)}}
+
 			{% endfor %}
 		</table>
 	</section>
+				{% if userUpdate is defined %}
+					{{dump(userUpdate)}}
+				{% endif %}
+				{% if userInBDD is defined %}
+					{{dump(userInBDD)}}
+				{% endif %}
+				{% if one is defined %}
+					{{dump(one)}}
+				{% endif %}
+				{% if two is defined %}
+					{{dump(two)}}
+				{% endif %}
+
+
+	<div class="modal" id="modal-1">
+		<div class="modal-content">
+			{{ form_start(update_form, {'attr': {'id': 'updtCollab'}}) }}
+			{{ form_row(update_form.id, {'attr': {'id' : 'id'}}) }}
+			{{ form_row(update_form.nom, {'attr': {'id' : 'NomUpdt'}}) }}
+			{{ form_row(update_form.prenom, {'attr': {'id' : 'prenomUpdt'}}) }}
+			{{ form_row(update_form.email, {'attr': {'id' : 'emailUpdt'}}) }}
+			{{ form_row(update_form.password, {'attr': {'id' : 'mdpUpdt'}}) }}
+			{{ form_row(update_form.roles, {'attr': {'id' : 'rolesUpdt'}}) }}
+			{{ form_end(update_form) }}
+
+		</div>
+	</div>
 {% endblock %}
-{% block javascripts %}{% endblock %}
+{% block javascripts %}
+	<script src="{{asset('assets/js/modal.js')}}"></script>
+
+{% endblock %}

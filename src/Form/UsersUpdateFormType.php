@@ -6,17 +6,19 @@ use App\Entity\Users;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UsersFormType extends AbstractType
+class UsersUpdateFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+        ->add('id', HiddenType::class, ['mapped' => false])
         ->add('nom', TextType::class, ['label' => 'Nom'])
         ->add('prenom', TextType::class, ['label' => 'Prénom'])
         ->add('password', PasswordType::class, ['label' => 'Mot de passe'])
@@ -26,7 +28,7 @@ class UsersFormType extends AbstractType
             'Admin' => "ROLE_ADMIN",
         ], "multiple" => 'false'])
         ->add('envoie', SubmitType::class, [
-            'label' => 'ajouter', 'attr' => ['class' => 'btn btn-primary mt-3 allWaButton']
+            'label' => 'modifier', 'attr' => ['class' => 'btn btn-primary mt-3 allWaButton']
         ])
         ;   
     }
