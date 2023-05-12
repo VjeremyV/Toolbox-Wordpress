@@ -6,6 +6,7 @@
 parameters:
     DEEPL_API: '%env(DEEPL_API)%'
     WORDAI_API: '%env(WORDAI_API)%'
+    SECRETTOKEN: '%env(SECRETTOKEN)%'
     MAIL: '%env(MAIL)%'
     
 services:

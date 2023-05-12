@@ -38,6 +38,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Outils::class, mappedBy: 'users')]
     private Collection $outils;
 
+    #[ORM\Column(length: 255)]
+    private ?string $Token = null;
+
     public function __construct()
     {
         $this->outils = new ArrayCollection();
@@ -165,6 +168,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->outils->removeElement($outil)) {
             $outil->removeUser($this);
         }
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->Token;
+    }
+
+    public function setToken(string $Token): self
+    {
+        $this->Token = $Token;
 
         return $this;
     }

@@ -11,13 +11,13 @@ use App\Classes\File;
 use App\Entity\Date;
 use App\Entity\Fichier;
 use App\Entity\Site;
+use App\Entity\Users;
 use App\Repository\FichierRepository;
 use App\Repository\OutilsRepository;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-
 
 class ExtracteurImagesController extends AbstractController
 {
@@ -43,11 +43,6 @@ class ExtracteurImagesController extends AbstractController
                 $xml = $displayerXml->display_xml($file);
 
                 $imgs_urls = [];
-                // $urls_dossier = self::format_urls_directory($xml);
-                // foreach ($urls_dossier as $url => $directories) {
-                //     $file_name = array_pop($directories);
-                //     $displayerXml->download_file($url, $directories, 'test', $file_name);
-                // }
             }
         } else {
             $imgs_urls = "";
@@ -65,25 +60,34 @@ class ExtracteurImagesController extends AbstractController
     #[Route('/dl_file/{nom_blog}', name: 'app_dlf', methods: ['POST'])]
     public function dl_file(string $nom_blog): Response
     {
-        $entityBody = file_get_contents('php://input');
-        $body = json_decode($entityBody, true);
+            $user = $this->getUser();
+            if($user){
 
-        $file = new File();
+                $entityBody = file_get_contents('php://input');
+            $body = json_decode($entityBody, true);
+    
+            $file = new File();
+    
+            $urls_dossier = self::format_urls_directory($body);
+    
+            foreach ($urls_dossier as $url => $directories) {
+                $file_name = array_pop($directories);
+                $file->download_file($url, $directories, $nom_blog, $file_name);
+            }
+    
+            return new Response(content: json_encode($urls_dossier));
+            }
 
-        $urls_dossier = self::format_urls_directory($body);
+            return new Response(content: json_encode(['WRONG USER' => 'WRONG USER MESSAGE']));
 
-        foreach ($urls_dossier as $url => $directories) {
-            $file_name = array_pop($directories);
-            $file->download_file($url, $directories, $nom_blog, $file_name);
-        }
-
-        return new Response(content: json_encode($urls_dossier));
     }
 
 
     #[Route('/make_zip/{nom_blog}', name: 'app_mkzip', methods: ['POST'])]
     public function make_zip(string $nom_blog): Response
     {
+        $user = $this->getUser();
+        if($user){
         $entityBody = file_get_contents('php://input');
         $body = json_decode($entityBody, true);
         $zip = new File();
@@ -91,6 +95,9 @@ class ExtracteurImagesController extends AbstractController
       
         
         return new Response(content: json_encode(['zipFile'=> $response]));
+    }
+
+    return new Response(content: json_encode(['WRONG USER' => 'WRONG USER MESSAGE']));
     }
 
 

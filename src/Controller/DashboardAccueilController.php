@@ -13,6 +13,7 @@ class DashboardAccueilController extends AbstractController
     {
         return $this->render('dashboard_accueil/index.html.twig', [
             'controller_name' => 'DashboardAccueilController',
+       
         ]);
     }
 }

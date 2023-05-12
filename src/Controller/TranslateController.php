@@ -22,6 +22,8 @@ class TranslateController extends AbstractController
     #[Route('/translate/{nom_blog}', name: 'app_translate', methods: ['POST'])]
     public function index(string $nom_blog, Request $request, SiteRepository $siteRepository, FichierRepository $fichierRepository, DateRepository $dateRepository, OutilsRepository $outilsRepository): Response
     {
+        $user = $this->getUser();
+        if($user){
         //on récupère le contenu du xml et on converti le json en objet itérable
         // php://input = flux en lecture seule qui vous permet de lire les données brutes du corps de la requête.
         $entityBody = file_get_contents('php://input');
@@ -97,13 +99,18 @@ class TranslateController extends AbstractController
         $this->add_file_bdd($list, $date, $site, 'liste', $fichierRepository, $outilsRepository);
 
         return new Response(content: json_encode($result));
-        // return new Response(content: json_encode($obj));
+
+    }
+
+    return new Response(content: json_encode(['WRONG USER' => 'WRONG USER MESSAGE']));
     }
 
 
     #[Route('/spinned', name: 'app_spin', methods: ['POST'])]
     public function spin(Request $request): Response
     {
+        $user = $this->getUser();
+        if($user){
         //on récupère le contenu du xml et on converti le json en objet itérable
         $entityBody = file_get_contents('php://input');
         $body = json_decode($entityBody);
@@ -123,10 +130,15 @@ class TranslateController extends AbstractController
         return new Response(content: json_encode($result));
     }
 
+    return new Response(content: json_encode(['WRONG USER' => 'WRONG USER MESSAGE']));
+    }
+
 
     #[Route('/make_csv_file/{nom_blog}', name: 'app_mkf', methods: ['POST'])]
     public function make_File(string $nom_blog, Request $request, DateRepository $dateRepository, SiteRepository $siteRepository, OutilsRepository $outilsRepository, FichierRepository $fichierRepository): Response
     {
+        $user = $this->getUser();
+        if($user){
         $lastDate = $dateRepository->findLastEntry();
         $site = $siteRepository->findBy(['nom' => $nom_blog]);
         $entityBody = file_get_contents('php://input');
@@ -140,9 +152,13 @@ class TranslateController extends AbstractController
         return new Response(content: json_encode($nom_csv));
     }
 
+    return new Response(content: json_encode(['WRONG USER' => 'WRONG USER MESSAGE']));
+    }
+
     #[Route('/get_existing_files/{nom_blog}', name: 'app_get_existing_files', methods: ['POST'])]
     public function get_existing_files(string $nom_blog, FichierRepository $fichierRepository, SiteRepository $siteRepository): Response
-    {
+    {     $user = $this->getUser();
+        if($user){
         $site = $siteRepository->findby(['nom'=> $nom_blog]);
         if(count($site) > 0){
             $id_blog = $site[0]->getId();
@@ -156,14 +172,24 @@ class TranslateController extends AbstractController
         return new Response(content: json_encode(["aucun fichier trouvé" => "aucun fichier trouvé"]));
     }
 
+    return new Response(content: json_encode(['WRONG USER' => 'WRONG USER MESSAGE']));
+    
+    
+    }
+
     #[Route('/get_trad_content/{fichier_trad}', name: 'app_get_trad_content', methods: ['POST'])]
     public function get_trad_content(string $fichier_trad): Response
     {
+        $user = $this->getUser();
+        if($user){
         $json = __DIR__.'/../../public/assets/uploads/traductions/'.$fichier_trad;
         $data = file_get_contents($json); 
         $obj = json_decode($data); 
         return new Response(content: json_encode($obj));
+        
+    }
 
+    return new Response(content: json_encode(['WRONG USER' => 'WRONG USER MESSAGE']));
     }
 
 
