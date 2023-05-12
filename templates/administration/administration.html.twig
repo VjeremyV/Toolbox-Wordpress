@@ -13,9 +13,7 @@
 	<h1 class="text-center">Administration</h1>
 	<section>
 		<h2>Ajouter un collaborateur</h2>
-		{% for r in role %}
-			{{ r }}
-		{% endfor %}
+
 		{{ form_start(form, {'attr': {'id': 'addCollab'}}) }}
 		{{ form_end(form) }}
 
@@ -49,30 +47,19 @@
 
 					</td>
 					<td>
+					{% if app.user.id != user.id %}
 						<i class="fa-solid fa-pen clickIcon" data-toggle="modal" data-target='#modal-1' data-updid="{{user.id}}" title="modifier"></i>
 						<a href="{{ path('app_admin_supp', {id : user.id})}}">
 							<i class="fa-sharp fa-solid fa-circle-xmark clickIcon" data-delid="{{user.id}}" title="supprimer"></i>
 						</a>
+						{% endif %}
 					</td>
 				</tr>
 
 			{% endfor %}
 		</table>
 	</section>
-				{% if userUpdate is defined %}
-					{{dump(userUpdate)}}
-				{% endif %}
-				{% if userInBDD is defined %}
-					{{dump(userInBDD)}}
-				{% endif %}
-				{% if one is defined %}
-					{{dump(one)}}
-				{% endif %}
-				{% if two is defined %}
-					{{dump(two)}}
-				{% endif %}
-
-
+		
 	<div class="modal" id="modal-1">
 		<div class="modal-content">
 			{{ form_start(update_form, {'attr': {'id': 'updtCollab'}}) }}

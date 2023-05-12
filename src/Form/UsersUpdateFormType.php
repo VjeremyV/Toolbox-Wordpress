@@ -21,7 +21,7 @@ class UsersUpdateFormType extends AbstractType
         ->add('id', HiddenType::class, ['mapped' => false])
         ->add('nom', TextType::class, ['label' => 'Nom'])
         ->add('prenom', TextType::class, ['label' => 'Prénom'])
-        ->add('password', PasswordType::class, ['label' => 'Mot de passe'])
+        ->add('password', PasswordType::class, ['label' => 'Mot de passe', "required" => false])
         ->add('email', EmailType::class, ['label' => 'Email'])
         ->add('roles', ChoiceType::class, ['label' => 'Rôles',  'choices'  => [
             'Collaborateur' => "ROLE_USER",
