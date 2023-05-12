@@ -108,10 +108,11 @@
 .nav-link:hover{
     color: #344767;
 }
-/* 
-#createCollab {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-} */
+
+nav ul {
+    list-style-type: none;
+}
+
+.text-primary {
+    color : #f7931e !important;
+}
