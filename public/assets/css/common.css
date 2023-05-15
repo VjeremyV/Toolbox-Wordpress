@@ -1,14 +1,15 @@
-#logoutIcon{
+/* ******************************************************************************************************************/
+#logoutIcon {
     font-size: 32px;
 }
 
-#logoHome{
+#logoHome {
     width: 100%;
     object-fit: cover;
 }
 
-#currentMenuSelected{
-    color : #f7931e;
+#currentMenuSelected {
+    color: #f7931e;
 }
 
 
@@ -19,14 +20,18 @@
 
 
 /********************************************Formulaires de fichier ***************************************/
-#entryFile div, #entryFileExisting div, #tradFilesForm, #tradFilesForm div:first-child {
+#entryFile div,
+#entryFileExisting div,
+#tradFilesForm,
+#tradFilesForm div:first-child {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-#entryFile > div, #entryFileExisting > div{
+#entryFile>div,
+#entryFileExisting>div {
     margin: 20px;
 }
 
@@ -36,39 +41,49 @@
     margin-left: auto !important;
     margin-right: auto !important;
 }
+
 #FileInput {
     border: 1px solid grey;
     padding: 15px;
 }
-#entryFileExisting #form div:nth-child(2), #entryFileExisting #form div:nth-child(3){
+
+#entryFileExisting #form div:nth-child(2),
+#entryFileExisting #form div:nth-child(3) {
     width: 350px;
 }
 
-#entryFileExisting #form div:nth-child(2){
+#entryFileExisting #form div:nth-child(2) {
     border-bottom: none;
     margin-bottom: 0;
 }
-#entryFileExisting #form div:nth-child(3){
+
+#entryFileExisting #form div:nth-child(3) {
     border-top: none;
     margin-top: 0;
 }
 
-#entryFile div:nth-child(3), #entryFileExisting #form div:nth-child(3){
-    flex-direction: row;    
+#entryFile div:nth-child(3),
+#entryFileExisting #form div:nth-child(3) {
+    flex-direction: row;
     align-items: center;
     padding-top: 0;
 }
 
-#entryFile div:nth-child(3) label, #entryFileExisting #form div:nth-child(3) label  {
+#entryFile div:nth-child(3) label,
+#entryFileExisting #form div:nth-child(3) label {
     margin: 0 15px 0 0;
 }
 
-#entryFile div:nth-child(2) label, #entryFile div:nth-child(2) input , #entryFileExisting #form div:nth-child(2) label, #entryFileExisting #form div:nth-child(2) input, .resultAutocomplete{
+#entryFile div:nth-child(2) label,
+#entryFile div:nth-child(2) input,
+#entryFileExisting #form div:nth-child(2) label,
+#entryFileExisting #form div:nth-child(2) input,
+.resultAutocomplete {
     cursor: pointer;
 }
 
 
-.linkContainer{
+.linkContainer {
     width: 600px;
     margin: auto;
 }
@@ -80,32 +95,33 @@
     background: white;
 }
 
-.resultAutocomplete:hover{
+.resultAutocomplete:hover {
     background: #f7931e;
     color: white;
 }
-#matchList{
-    width :203px;
+
+#matchList {
+    width: 203px;
     border-top: none;
     position: absolute;
 }
 
-#inputContainer{
+#inputContainer {
     position: relative;
 }
 
 
 /**************************************************NAVIGATION A ONGLETS*****************************************/
 
-.nav-link.active{
+.nav-link.active {
     color: #f7931e !important;
 }
 
-.nav-link{
+.nav-link {
     color: #344767;
 }
 
-.nav-link:hover{
+.nav-link:hover {
     color: #344767;
 }
 
@@ -114,5 +130,17 @@ nav ul {
 }
 
 .text-primary {
-    color : #f7931e !important;
+    color: #f7931e !important;
 }
+
+
+
+@media screen and (max-width: 900px) {
+    h1 {
+        font-size: 36px;
+    }
+
+    h2{
+        font-size: 30px;
+    }
+} 

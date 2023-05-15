@@ -2,6 +2,8 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+				<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
 		<title>
 			{% block title %}Toolbox - Connexion
 			{% endblock %}
@@ -19,9 +21,9 @@
 
 	</head>
 
-
+	
 	{% block body %}
-
+	
 			<form method="post" class="d-flex justify-content-center align-items-center flex-column container mt-5">
 				{% if error %}
 					<div class="alert alert-danger">Impossible de se connecter, vérifiez vos accès</div>
@@ -29,7 +31,7 @@
 				{% endif %}
 
 				<img src="{{ asset('assets/img/logo/logo_wa_couleur.png')}}" alt="">
-				<h1 class="h3 mb-3 font-weight-normal">Connectez-vous</h1>
+				<h1 class="mb-3 font-weight-normal">Connectez-vous</h1>
 				<label class="m-0" for="inputEmail">Email</label>
 				<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control text-center" required style="max-width : 500px">
 				<label class="m-0" for="inputPassword">Mot de passe</label>
@@ -41,11 +43,7 @@
 					Connexion
 				</button>
 			</form>
-
- 
-
-
-
+	
 	{% endblock %}
 
 </html>

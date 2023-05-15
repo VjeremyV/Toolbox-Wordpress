@@ -25,8 +25,6 @@ class CreateFirstUserController extends AbstractController
             $pwd = $passwordHasher->hashPassword($user, $user->getPassword()); // pour hasher le pwd
             $user->setPassword($pwd);
             $user->setRoles(['ROLE_ADMIN']);
-            $token = $passwordHasher->hashPassword($user, $this->getParameter('SECRETTOKEN'));
-            $user->setToken($token);
             $usersRepository->save($user, true);
 
         }
