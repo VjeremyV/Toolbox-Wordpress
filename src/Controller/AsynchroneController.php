@@ -17,7 +17,7 @@ use App\Repository\FichierRepository;
 use App\Repository\OutilsRepository;
 use DateTime;
 
-class TranslateController extends AbstractController
+class AsynchroneController extends AbstractController
 {
     #[Route('/translate/{nom_blog}', name: 'app_translate', methods: ['POST'])]
     public function index(string $nom_blog, Request $request, SiteRepository $siteRepository, FichierRepository $fichierRepository, DateRepository $dateRepository, OutilsRepository $outilsRepository): Response
@@ -35,7 +35,7 @@ class TranslateController extends AbstractController
         $txtFile = []; //tableau qui contiendra les données à inscrire dans le fichier txt
 
         //on vérifie si le site n'existe pas déjà en bdd, sinon on le créée
-        if ($this->is_new($nom_blog, $siteRepository)) {
+        if (self::is_new($nom_blog, $siteRepository)) {
             $site = new Site();
             $site->setNom($nom_blog);
             $site->setUrl("");
@@ -55,7 +55,6 @@ class TranslateController extends AbstractController
                         $value = self::urlToSlug($value);
                     }
                     //On traduit la valeur en anglais
-                    // $traductValue = 'dublabla';
                     $traductValue = $translator->getTranslate($value, $this->getParameter('DEEPL_API'));
 
 
@@ -92,11 +91,11 @@ class TranslateController extends AbstractController
         $current_date = new DateTime();
         $date = new Date();
         $date->setDate($current_date);
-        $dateRepository->save($date);
+        $dateRepository->save($date, true);
 
         //on ajoute les fichiers en bdd
-        $this->add_file_bdd($trad, $date, $site, 'traduction', $fichierRepository, $outilsRepository);
-        $this->add_file_bdd($list, $date, $site, 'liste', $fichierRepository, $outilsRepository);
+        $this->add_file_bdd($trad, $date, $site, 'traduction', $fichierRepository, $outilsRepository, "spinnerman");
+        $this->add_file_bdd($list, $date, $site, 'liste', $fichierRepository, $outilsRepository, "spinnerman");
 
         return new Response(content: json_encode($result));
 
@@ -144,7 +143,7 @@ class TranslateController extends AbstractController
         $loader = new File;
         $nom_csv = $loader->save_csv($body, $nom_blog);
 
-        $this->add_file_bdd($nom_csv . '.csv', $lastDate[0], $site[0], 'spin', $fichierRepository, $outilsRepository);
+        $this->add_file_bdd($nom_csv . '.csv', $lastDate[0], $site[0], 'spin', $fichierRepository, $outilsRepository, "spinnerman");
 
 
         return new Response(content: json_encode($nom_csv));
@@ -200,9 +199,9 @@ class TranslateController extends AbstractController
      * @param OutilsRepository $outilsRepository
      * @return void
      */
-    private function add_file_bdd(string $fileName, Date $date, Site $site, string $type, FichierRepository $fichierRepository, OutilsRepository $outilsRepository)
+    private function add_file_bdd(string $fileName, Date $date, Site $site, string $type, FichierRepository $fichierRepository, OutilsRepository $outilsRepository, string $nomOutils)
     {
-        $outil = $outilsRepository->findBy(['nom' => 'spinnerman']);
+        $outil = $outilsRepository->findBy(['nom' => $nomOutils]);
         $file = new Fichier();
         $file->setNomBdd($fileName);
         $file->setNomPourUtilisateur($this->formatUserFileName($fileName, $type));
@@ -248,7 +247,7 @@ class TranslateController extends AbstractController
      * @param SiteRepository $siteRepository
      * @return boolean
      */
-    private function is_new(string $name, SiteRepository $siteRepository)
+    public static function is_new(string $name, SiteRepository $siteRepository)
     {
         $sites = $siteRepository->findAll();
         foreach ($sites as $site) {
@@ -258,4 +257,106 @@ class TranslateController extends AbstractController
         }
         return true;
     }
+
+
+    
+    #[Route('/make_zip/{nom_blog}', name: 'app_mkzip', methods: ['POST'])]
+    public function make_zip(string $nom_blog, DateRepository $dateRepository, SiteRepository $siteRepository, FichierRepository $fichierRepository, OutilsRepository $outilsRepository): Response
+    {
+        $site = $siteRepository->findOneBy(['nom' => $nom_blog]);
+        $user = $this->getUser();
+        if($user){
+        $entityBody = file_get_contents('php://input');
+        $body = json_decode($entityBody, true);
+        $zip = new File();
+        $response = $zip->make_zip($body, $nom_blog);
+      
+        $time= time();
+        $current_date = new DateTime();
+        $date = new Date();
+        $date->setDate($current_date);
+        $dateRepository->save($date, true);
+
+        $this->add_file_bdd("images-".$nom_blog.$time, $date, $site, "zip", $fichierRepository, $outilsRepository, "Extrac-thor" );
+        
+        return new Response(content: json_encode(['zipFile'=> $response]));
+    }
+
+    return new Response(content: json_encode(['WRONG USER' => 'WRONG USER MESSAGE']));
+    }
+
+
+
+    #[Route('/dl_file/{nom_blog}', name: 'app_dlf', methods: ['POST'])]
+    public function dl_file(string $nom_blog): Response
+    {
+            $user = $this->getUser();
+            if($user){
+
+                $entityBody = file_get_contents('php://input');
+            $body = json_decode($entityBody, true);
+    
+            $file = new File();
+    
+            $urls_dossier = self::format_urls_directory($body);
+    
+            foreach ($urls_dossier as $url => $directories) {
+                $file_name = array_pop($directories);
+                $file->download_file($url, $directories, $nom_blog, $file_name);
+            }
+    
+            return new Response(content: json_encode($urls_dossier));
+            }
+
+            return new Response(content: json_encode(['WRONG USER' => 'WRONG USER MESSAGE']));
+
+    }
+
+    /**
+ * formate les urls des dossiers pour utiliser la fonction de telechargement
+ *
+ * @param array $urls
+ * @return array
+ */
+private function format_urls_directory(array $urls): array
+{
+    foreach ($urls as $post) {
+        foreach ($post as $element) {
+            foreach (self::pick_img_url($element['contenu']) as $urls) {
+                foreach ($urls as $url) {
+                    $image_url = explode("/", $url);
+                    for ($i = 0; $i < count($image_url); $i++) {
+                        if ($i >= count($image_url) - 3) {
+                            $urls_dossier[$url][] = $image_url[$i];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return $urls_dossier;
+}
+
+private function pick_img_url(string $html)
+{
+
+    $extract_list[] = explode('<img', $html); // on éclate les différentes chaines de caractères correspondant aux posts à chaque fois qu'une balise image s'ouvre
+
+    $list_imgs = [];
+
+    $count = 0; // on initie un compteur
+    foreach ($extract_list as $html_parts) {
+        array_shift($html_parts); // à chaque tableau contenant les différents éléments html du post, le premier élément ne contient pas d'image donc on le supprime
+        foreach ($html_parts as $string) {
+            $post_array = explode('/>', $string); //la string contenant le html du post
+            $img_html = $post_array[0]; //la string contenant le html de l'image
+            $img_metas = explode('"', $img_html); // on sépare les éléments de la string en un tableau
+            $index_of_src = array_search(" src=", $img_metas); //on recherche l'index de la string contenant " src=" car on sait qu'elle précède l'url de l'image
+            $list_imgs[$count][] = $img_metas[$index_of_src + 1]; //on ajoute au tableau de résultat l'url dont l'index correspond àindex_of_src +1
+        }
+        $count++; // on incrémente le compteur
+    }
+
+    return $list_imgs; // on retourne la liste des urls des images
+}
 }

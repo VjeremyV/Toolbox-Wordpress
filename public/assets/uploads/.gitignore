@@ -1,0 +1,6 @@
+# ignorer les fichiers clefs API
+/listes/
+/spins/
+/traductions/
+/zip_files/
+/zip_imgs/

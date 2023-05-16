@@ -21,7 +21,7 @@ class Site
     #[ORM\Column(length: 255)]
     private ?string $url = null;
 
-    #[ORM\OneToMany(mappedBy: 'site', targetEntity: fichier::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'site', targetEntity: Fichier::class, orphanRemoval: true)]
     private Collection $fichiers;
 
     public function __construct()
