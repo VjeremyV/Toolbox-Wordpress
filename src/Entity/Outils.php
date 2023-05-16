@@ -100,4 +100,9 @@ class Outils
 
         return $this;
     }
+
+    function __toString()
+    {
+        return $this->getNom();
+    }
 }

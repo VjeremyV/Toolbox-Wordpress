@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Spinnerman : du Français à l'anglais, le tout spinné
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/historique.css')}}" rel="stylesheet"/>
+
+{% endblock %}
+
+{% block body %}
+
+
+	<h1 class="text-center">Spinnerman</h1>
+	<h2 class="text-center font-italic mb-5">Un texte Français donné, un texte anglais spinné offert</h2>
+
+	<ul class="nav nav-tabs">
+		<li class="nav-item">
+			<a class="nav-link " href="{{path('app_spinnerman')}}">Traduire et Spinner</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{path('app_spinnerman_existing_blog')}}">Spinner depuis une traduction</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link active" href="{{path('app_spinnerman_historique')}}">Historique</a>
+		</li>
+	</ul>
+
+	<div class="filterContainer text-center">
+		<div>
+			<div id="searchForm">
+				<form action="">
+					<input type="text" name="rechercher" id="rechercher">
+					<input type="submit" class="btn btn-sm btn-primary allWaButton" value="Chercher un site">
+				</form>
+			</div>
+			<form action="" class="d-flex justify-content-center align-items-center">
+				<div>
+					<span>Trier par :</span>
+					<div class="filterInputContainer">
+						<div>
+							<label for="date">Date</label>
+							<input type="checkbox" name="date" id="date" {% if app.request.get('date')%} checked {% endif %}>
+						</div>
+						<div>
+							<label for="site">Site</label>
+							<input type="checkbox" name="site" id="site" {% if app.request.get('site')%} checked {% endif %}>
+						</div>
+					</div>
+				</div>
+
+				<div>
+					<span>N'aficher que :</span>
+					<div class="filterInputContainer">
+						<div>
+							<label for="type">Traduction</label>
+							<input type="radio" name="type" value="traduction" id="type" {% if app.request.get('type') and app.request.get('type') == 'traduction' %} checked {% endif %}>
+						</div>
+						<div>
+							<label for="type">Spin</label>
+							<input type="radio" name="type" value="spin" id="type" {% if app.request.get('type') and app.request.get('type') == 'spin' %} checked {% endif %}>
+						</div>
+						<div>
+							<label for="type">Listes</label>
+							<input type="radio" name="type" value="liste" id="type" {% if app.request.get('type') and app.request.get('type') == "liste" %} checked {% endif %}>
+						</div>
+						<div>
+							<input type="submit" value="Mettre à jour le filtre" class="btn btn-sm btn-primary allWaButton">
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<button class="btn btn-sm btn-primary allWaButton "><a class="text-white" href="/spinnerman/historique/">Réinitialiser recherche et filtres</a></button>
+	</div>
+
+
+	<table id="historique-table">
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th>Site</th>
+				<th>Url</th>
+				<th>Type</th>
+				<th>Fichier</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for fichier in fichiers %}
+				<tr>
+					<td>{{ fichier.Date.date|date("d/m/Y") }}</td>
+					<td>{{ fichier.site.nom }}</td>
+					<td>{{ fichier.site.url }}</td>
+					<td>{{ fichier.type }}</td>
+					<td>
+						<a href="/assets/uploads/{{ fichier.type }}s/{{ fichier.nom_bdd }}" download>{{ fichier.nom_pour_utilisateur }}</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<div class="col-12 text-center">
+		{% if previous >= 0 %}
+			<a href="{{ path('app_spinnerman_historique', {offset: previous}) }}" class="btn btn-sm btn-primary m-0 allWaButton">
+				previous
+			</a>
+		{% endif %}
+
+		{% if pageActuelle <= 3 %}
+			{%if pageActuelle > 1 %}
+				{% for i in 2..pageActuelle %}
+					<a href="{{ path('app_spinnerman_historique', {offset: previous - (offset * (pageActuelle - i)), date: app.request.query.get("date"), site: app.request.query.get("site") , type : app.request.get('type')})}}" class="btn btn-sm btn-primary m-3 allWaButton">{{ i - 1 }}</a>
+				{% endfor %}
+			{% endif %}
+		{% else %}
+			{% for i in pageActuelle-2..pageActuelle %}
+				<a href="{{ path('app_spinnerman_historique', {offset: previous - (offset * (pageActuelle - i)) , date: app.request.query.get("date"), site: app.request.query.get("site"), type : app.request.get('type')})}}" class="btn btn-sm btn-primary m-3 allWaButton">{{ i - 1 }}</a>
+			{% endfor %}
+		{% endif %}
+
+
+		<span class="btn btn-sm btn-primary m-3 bg-warning">
+			{{ pageActuelle }}</span>
+
+
+		{% if difPages < 3 %}
+			{% if  difPages > 0 %}
+				{% for i in 1..difPages %}
+					<a href="{{ path('app_spinnerman_historique', {offset: next + (offset * (i - 1)) , date: app.request.query.get("date"), site: app.request.query.get("site"), type : app.request.get('type')}) }}" class="btn btn-sm btn-primary m-3 allWaButton">{{ pageActuelle + i }}</a>
+				{% endfor %}
+			{% endif %}
+		{% else %}
+			{% for i in 1..3 %}
+				<a href="{{ path('app_spinnerman_historique', {offset: next + (offset * (i - 1)) , date: app.request.query.get("date"), site: app.request.query.get("site"), type : app.request.get('type')}) }}" class="btn btn-sm btn-primary m-3 allWaButton">{{ pageActuelle + i }}</a>
+			{% endfor %}
+		{% endif %}
+
+		{% if next < fichiers|length %}
+			<a href="{{ path('app_spinnerman_historique', {offset: next , date: app.request.query.get("date"), site: app.request.query.get("site"), type : app.request.get('type')}) }}" class="btn btn-sm btn-primary m-0 allWaButton">next
+			</a>
+		{% endif %}
+
+		<p>{{ pageActuelle }}
+			/
+			{{ nbrePages }}</p>
+	</div>
+
+{% endblock %}

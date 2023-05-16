@@ -125,8 +125,6 @@ class TranslateController extends AbstractController
                 $result[$element] = $value;
             }
         }
-
-
         return new Response(content: json_encode($result));
     }
 
@@ -171,10 +169,7 @@ class TranslateController extends AbstractController
         }
         return new Response(content: json_encode(["aucun fichier trouvé" => "aucun fichier trouvé"]));
     }
-
-    return new Response(content: json_encode(['WRONG USER' => 'WRONG USER MESSAGE']));
-    
-    
+    return new Response(content: json_encode(['WRONG USER' => 'WRONG USER MESSAGE']));   
     }
 
     #[Route('/get_trad_content/{fichier_trad}', name: 'app_get_trad_content', methods: ['POST'])]

@@ -1,0 +1,33 @@
+#historique-table tr {
+    border: 1px solid black;
+  }
+
+  td, th {
+    padding: 20px;
+    text-align: center;
+  }
+
+  #historique-table {
+    margin: auto;
+  }
+
+  .filterContainer form, .filterContainer form .filterInputContainer, #searchForm {
+    display: flex;
+
+  }
+  .filterContainer form  div {
+    padding: 10px;
+  }
+
+  #searchForm {
+    justify-content: center;
+  }
+
+  #searchForm form {
+    margin: 10px;
+    padding: 10px;
+  }
+
+  #searchForm form input {
+    margin: 5px;
+  }

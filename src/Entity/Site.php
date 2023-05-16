@@ -87,4 +87,8 @@ class Site
 
         return $this;
     }
+    function __toString()
+    {
+        return $this->getNom()."-";$this->getUrl();
+    }
 }

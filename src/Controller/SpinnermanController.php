@@ -34,7 +34,7 @@ class SpinnermanController extends AbstractController
             'NewFileForm' => $NewFileForm->createView(),
             'xml' => $xml,
             'sites' => $sites
-                ]);
+        ]);
     }
     #[Route('/spinnerman/existing_blog', name: 'app_spinnerman_existing_blog')]
     public function index_existing_blog(Request $request, SiteRepository $siteRepository): Response
@@ -48,18 +48,59 @@ class SpinnermanController extends AbstractController
         return $this->render('spinnerman/spinnerman-existing.html.twig', [
             'form' => $form->createView(),
             'xml' => $xml,
-                ]);
+        ]);
+    }
+    #[Route('/spinnerman/historique', name: 'app_spinnerman_historique')]
+    public function index_historique(FichierRepository $fichierRepository, SiteRepository $siteRepository, DateRepository $dateRepository, request $request): Response
+    {
+        $fichiers_infos = $fichierRepository->findBy(['outils' => 1]);
+        $fichiers = [];
+        $query = $request->query;
+        $search = [];
+        foreach ($query as $req => $value) {
+            if ($req != 'offset' && $req != "type" && $req != "rechercher") {
+                $search[] = $req;
+            } elseif ($req === "type" || $req ==="rechercher"){
+                $search[] = $value;
+            }
+        }
+        /************Pagination ********************/
+        $offset = max(0, $request->query->getInt('offset', 0));
+        $paginator = $fichierRepository->getFichierPaginator($offset, count($search) > 0 ? $search : null);
+        $previous = $offset - FichierRepository::PAGINATOR_PER_PAGE;
+        $next = min(count($paginator), $offset + FichierRepository::PAGINATOR_PER_PAGE);
+        $nbrePages = ceil(count($paginator) / FichierRepository::PAGINATOR_PER_PAGE);
+        $pageActuelle = ceil($next / FichierRepository::PAGINATOR_PER_PAGE);
+        $difPages = $nbrePages - $pageActuelle;
+        ////////////////////////////////////////////////////////////////////////////
+        foreach ($fichiers_infos as $index => $fichier_info) {
+            $fichiers[$index]["fichier"] = $fichier_info;
+            $fichiers[$index]["site"] = $siteRepository->findOneBy(['id' => $fichier_info->getSite()]);
+            $fichiers[$index]["Date"] = $dateRepository->findOneBy(['id' => $fichier_info->getDate()]);
+        }
+
+        return $this->render('spinnerman/historique.html.twig', [
+            'fichiers' => $paginator,
+            'previous' => $previous,
+            'next' => $next,
+            'nbrePages' => $nbrePages,
+            'pageActuelle' => $pageActuelle,
+            'difPages' => $difPages,
+            "offset" => $offset,
+            'query' => $search
+        ]);
     }
 
-   
 
-    private function getListSites(SiteRepository $siteRepository){
+
+    private function getListSites(SiteRepository $siteRepository)
+    {
         $sites_infos = $siteRepository->findAll();
         $sites = [];
         foreach ($sites_infos as $site) {
-            $sites[$site->getNom()]= $site->getId();  // on construit le tableau de cette manière pour les les <options> du <select> soit au format <option value='idDuSite'>nomDuSite</option> 
+            $sites[$site->getNom()] = $site->getId();  // on construit le tableau de cette manière pour les les <options> du <select> soit au format <option value='idDuSite'>nomDuSite</option> 
         }
-      return  $sites;
+        return  $sites;
     }
     /**
      * affiche le formulaire pour envoyer son fichier xml pour un nouveau blog
@@ -102,19 +143,18 @@ class SpinnermanController extends AbstractController
     {
         if ($form->isSubmitted() && $form->isValid()) {
             // on fait la différence entre les 2 formulaire grâce à l'existente ou non des variables du premier formulaire
-            $_SESSION['spinnerman']['last_spinned_blog'] = isset($form['nom_blog']) ? $form['nom_blog']->getData() : $form['nom_blogExisting']->getData() ; 
-           
+            $_SESSION['spinnerman']['last_spinned_blog'] = isset($form['nom_blog']) ? $form['nom_blog']->getData() : $form['nom_blogExisting']->getData();
+
             // on utilise la class FormChecker pour vérifier l'extension du fichier envoyé
             $checker = new FormChecker();
             $file = isset($form['xmlArticlesWP']) ? $form['xmlArticlesWP']->getData() : $form['xmlArticlesWPExisting']->getData();
 
             if ($checker->check_file_extension($file->getClientOriginalExtension(), ['xml'])) {
-                
+
                 $displayerXml = new File();
                 return $displayerXml->display_xml($file); //retourne un array depuis le fichier xml
             }
         }
         return "";
     }
-
 }

@@ -17,10 +17,10 @@ class Fichier
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom_pour_utilisateur = null;
+    public ?string $nom_pour_utilisateur = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom_bdd = null;
+    public ?string $nom_bdd = null;
 
 
 

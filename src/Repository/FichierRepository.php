@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Fichier;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @extends ServiceEntityRepository<Fichier>
@@ -16,6 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FichierRepository extends ServiceEntityRepository
 {
+    public const PAGINATOR_PER_PAGE = 10;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Fichier::class);
@@ -39,28 +41,56 @@ class FichierRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Fichier[] Returns an array of Fichier objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function getFichierPaginator(int $offset, array $search = null)
+    {
+        $query = $this->createQueryBuilder('c');
 
-//    public function findOneBySomeField($value): ?Fichier
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if($search != null && count($search) > 0){
+            foreach($search as $req){
+                if($req == "date" || $req == "site"){
+                    $query->join('c.'.$req, $req)
+                    ->addOrderBy( $req.".id", 'DESC');
+                } 
+                elseif($req == "traduction" || $req == "spin" || $req == "liste") {
+                    $query->Where( "c.type LIKE :req")
+                    ->setParameter('req' , $req);
+                } else {
+                    $query->join('c.site', "site")
+                    ->Where('site.nom LIKE :nom')
+                    ->setParameter('nom', '%' . $req . '%');
+                }
+            }
+        }
+
+        $query->addOrderBy('c.id', 'DESC')
+            ->setMaxResults(self::PAGINATOR_PER_PAGE)
+            ->setFirstResult($offset)
+            ->getQuery();
+
+        return new Paginator($query);
+    }
+    //    /**
+    //     * @return Fichier[] Returns an array of Fichier objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('f')
+    //            ->andWhere('f.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('f.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?Fichier
+    //    {
+    //        return $this->createQueryBuilder('f')
+    //            ->andWhere('f.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }
