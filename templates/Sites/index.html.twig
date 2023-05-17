@@ -15,20 +15,23 @@
 	<table id="historique-table">
 		<thead>
 			<tr>
-				<th>Site</th>
+				<th class="flex-th">Sites
+				<label for="selectAll">Tout cocher</label>
+				<input type="checkbox" name="selectAll" id="selectAll">
+				</th>
 				<th>Url</th>
 				<th>Traduction d'article</th>
 				<th>Spin D'article traduits</th>
 				<th>Liste des titres traduits</th>
 				<th>Images extraites d'articles</th>
-				<th></th>
+				<th><button id="multiSppBtn"class="btn btn-sm btn-primary m-2 allWaButton">Supprimer les sites séléctionnés</button></th>
 			</tr>
 		</thead>
 
 		<tbody>
 			{% for site in sites %}
 				<tr>
-					<td>{{site.nom}}</td>
+					<td><input type="checkbox" class="selectCheckbox" name="select-{{site.id}}" id="select-{{site.id}}">{{site.nom}}</td>
 					<td>{{site.url}}</td>
 					<td>
 						{% for fichier in site.fichiers %}
@@ -131,4 +134,6 @@ deleteBtn.forEach((btn) => {
 
 });
 </script>
+	<script src="{{ asset('assets/js/sites.js')}}"></script>
+
 {% endblock %}
