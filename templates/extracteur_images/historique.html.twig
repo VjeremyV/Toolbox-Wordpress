@@ -11,18 +11,16 @@
 {% block body %}
 
 
-	<h1 class="text-center">Spinnerman</h1>
-	<h2 class="text-center font-italic mb-5">Un texte Français donné, un texte anglais spinné offert</h2>
+	<h1 class="text-center">Extraction des images d'articles wordpress</h1>
+	<h2 class="text-center font-italic mb-5">Ici on récupère les médias attachés aux articles d'un Wordpress</h2>
+
 
 	<ul class="nav nav-tabs">
 		<li class="nav-item">
-			<a class="nav-link " href="{{path('app_spinnerman')}}">Traduire et Spinner</a>
+			<a class="nav-link " href="{{path('app_extracteur_images')}}">Extraire des images</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="{{path('app_spinnerman_existing_blog')}}">Spinner depuis une traduction</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link active" href="{{path('app_spinnerman_historique')}}">Historique</a>
+			<a class="nav-link active" href="{{path('app_extracteur_historique')}}">Historique</a>
 		</li>
 	</ul>
 
@@ -50,28 +48,13 @@
 				</div>
 
 				<div>
-					<span>N'aficher que :</span>
-					<div class="filterInputContainer">
-						<div>
-							<label for="type">Traduction</label>
-							<input type="radio" name="type" value="traduction" id="type" {% if app.request.get('type') and app.request.get('type') == 'traduction' %} checked {% endif %}>
-						</div>
-						<div>
-							<label for="type">Spin</label>
-							<input type="radio" name="type" value="spin" id="type" {% if app.request.get('type') and app.request.get('type') == 'spin' %} checked {% endif %}>
-						</div>
-						<div>
-							<label for="type">Listes</label>
-							<input type="radio" name="type" value="liste" id="type" {% if app.request.get('type') and app.request.get('type') == "liste" %} checked {% endif %}>
-						</div>
-						<div>
-							<input type="submit" value="Mettre à jour le filtre" class="btn btn-sm btn-primary allWaButton">
-						</div>
-					</div>
+					<input type="submit" value="Mettre à jour le filtre" class="btn btn-sm btn-primary allWaButton">
 				</div>
 			</form>
 		</div>
-		<button class="btn btn-sm btn-primary allWaButton "><a class="text-white" href="/spinnerman/historique/">Réinitialiser recherche et filtres</a></button>
+		<button class="btn btn-sm btn-primary allWaButton ">
+			<a class="text-white" href="/extracteur-images/historique/">Réinitialiser recherche et filtres</a>
+		</button>
 	</div>
 
 
@@ -91,10 +74,11 @@
 					<td>{{ fichier.Date.date|date("d/m/Y") }}</td>
 					<td>{{ fichier.site.nom }}</td>
 					<td>{{ fichier.site.url }}</td>
-					<td>{{ fichier.type }} </td>
+					<td>{{ fichier.type }}</td>
 					<td>
-						<a href="/assets/uploads/{{ fichier.type }}s/{{ fichier.nom_bdd }}" download>{{ fichier.nom_pour_utilisateur }}</a> 
-						<i  class="fa-sharp fa-solid fa-circle-xmark clickIcon deleteBtn" data-link="{{ path('app_spinnerman_filesupp', {id : fichier.id})}}" data-delnom="{{fichier.nom_pour_utilisateur}}" data-delsite="{{fichier.site.nom}}" title="supprimer" ></i>
+						<a href="/assets/uploads/{{ fichier.type }}_files/{{ fichier.nom_bdd }}" download>{{ fichier.nom_pour_utilisateur }}</a> 
+						<i  class="fa-sharp fa-solid fa-circle-xmark clickIcon deleteBtn" data-link="{{ path('app_extracteur-images_filesupp', {id : fichier.id})}}" data-delnom="{{fichier.nom_pour_utilisateur}}" data-delsite="{{fichier.site.nom}}" title="supprimer" ></i>
+
 					</td>
 				</tr>
 			{% endfor %}

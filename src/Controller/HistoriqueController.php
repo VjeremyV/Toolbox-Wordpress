@@ -23,4 +23,6 @@ class HistoriqueController extends AbstractController
 
     return new Response(content: json_encode(['WRONG USER' => 'WRONG USER MESSAGE']));
     }
+
+    
 }

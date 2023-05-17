@@ -1,6 +1,7 @@
 window.onload = () => {
   // On récupère tous les boutons d'ouverture de modale
   const modalButtons = document.querySelectorAll("[data-toggle=modal]");
+ 
 
   for (let button of modalButtons) {
     button.addEventListener("click", function (e) {
@@ -10,6 +11,8 @@ window.onload = () => {
       let email = document.querySelector('.email-'+button.dataset.updid).textContent;
       let roles = document.querySelector('.roles-'+button.dataset.updid).textContent.trim();
 
+
+/**on setup les champs avec l'utilisateur choisi */
       document.getElementById('users_update_form_nom').value = nom;
       document.getElementById('users_update_form_prenom').value = prenom;
       document.getElementById('users_update_form_email').value = email;
@@ -17,7 +20,6 @@ window.onload = () => {
       document.getElementById('users_update_form_roles').value = roles == "Collaborateur" ? "ROLE_USER" : "ROLE_ADMIN";
       document.getElementById('users_update_form_id').value = button.dataset.updid;
       
-      console.log(roles)
       ///affichage///
       e.preventDefault();
       let target = this.dataset.target;

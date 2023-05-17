@@ -183,10 +183,11 @@ class File
         return $titre;
     }
 
-    public function make_zip(array $urls, string $site_name)
+    public function make_zip(array $urls, string $site_name, string $zip_FileName)
     {
         $zip = new ZipArchive();
-        if ($zip->open(__DIR__ . "/../../public/assets/uploads/zip_files/" . $site_name . ".zip", ZipArchive::CREATE) === true) {
+        if ($zip->open(__DIR__ . "/../../public/assets/uploads/zip_files/" .$zip_FileName .".zip", ZipArchive::CREATE) === true) {
+            $path = __DIR__ . "/../../public/assets/uploads/zip_imgs/" . $site_name  ;
             foreach ($urls as $data) {
                 foreach ($data as $elements) {
                     $file_name = array_pop($elements);
@@ -196,16 +197,18 @@ class File
                         $directory .= $dir . '/';
                     }
                     //     // // Ajout d’un fichier.
-                    $fp = __DIR__ . "/../../public/assets/uploads/zip_imgs/" . $site_name . "/" . $directory . $file_name;
+                    $fp = $path. "/" . $directory . $file_name;
 
                     $zip->addFile($fp, $directory . $file_name);
                 }
             }
             // Et on referme l'archive.
             $zip->close();
-            return "/assets/uploads/zip_files/" . $site_name . ".zip";
+            //on supprime les fichiers temporaires
+            $this->rrmdir($path);
+            return "/assets/uploads/zip_files/".$zip_FileName. ".zip";
         } else {
-            var_dump('Impossible d&#039;ouvrir &quot;Zip.zip<br/>');
+            var_dump("Impossible d'ouvrir le .zip<br/>");
             die();
             // Traitement des erreurs avec un switch(), par exemple.
         }
@@ -237,5 +240,22 @@ class File
         $fp = __DIR__ . "/../../public/assets/uploads/zip_imgs/" . $site_name . "/" . $directory . $file_name;
         file_put_contents($fp, $data);
         return true;
+    }
+
+    private function rrmdir($src) {
+        $dir = opendir($src);
+        while(false !== ( $file = readdir($dir)) ) {
+            if (( $file != '.' ) && ( $file != '..' )) {
+                $full = $src . '/' . $file;
+                if ( is_dir($full) ) {
+                    $this->rrmdir($full);
+                }
+                else {
+                    unlink($full);
+                }
+            }
+        }
+        closedir($dir);
+        rmdir($src);
     }
 }

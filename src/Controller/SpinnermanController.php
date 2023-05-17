@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Classes\FormChecker;
 use App\Classes\File;
+use App\Entity\Fichier;
 use App\Repository\DateRepository;
 use App\Repository\FichierRepository;
 use App\Repository\SiteRepository;
@@ -91,7 +92,20 @@ class SpinnermanController extends AbstractController
         ]);
     }
 
+    #[Route('/spinnerman/supp/{id}', name: 'app_spinnerman_filesupp')]
+    public function admin_supp(FichierRepository $fichierRepository, Fichier $fichier): Response
+    {
+        $outil= $fichier->getOutils();
+        if($outil->getId() === 1){
 
+            $fichierRepository->remove($fichier, true);
+            
+            $this->addFlash('info', 'Le fichier a bien été supprimé');
+            return $this->redirectToRoute('app_spinnerman_historique');
+        }
+        return $this->redirectToRoute('app_spinnerman_historique');
+
+    }
 
     private function getListSites(SiteRepository $siteRepository)
     {

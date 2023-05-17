@@ -66,6 +66,62 @@ class ExtracteurImagesController extends AbstractController
         ]);
     }
 
+    #[Route('/extracteur-images/historique', name: 'app_extracteur_historique')]
+    public function index_historique(FichierRepository $fichierRepository, SiteRepository $siteRepository, DateRepository $dateRepository, request $request): Response
+    {
+        $fichiers_infos = $fichierRepository->findBy(['outils' => 1]);
+        $fichiers = [];
+        $query = $request->query;
+        $search = [];
+        foreach ($query as $req => $value) {
+            if ($req != 'offset' && $req != "type" && $req != "rechercher") {
+                $search[] = $req;
+            } elseif ($req === "type" || $req ==="rechercher"){
+                $search[] = $value;
+            }
+        }
+        /************Pagination ********************/
+        $offset = max(0, $request->query->getInt('offset', 0));
+        $paginator = $fichierRepository->getFichierPaginatorExtracteurImg($offset, count($search) > 0 ? $search : null);
+        $previous = $offset - FichierRepository::PAGINATOR_PER_PAGE;
+        $next = min(count($paginator), $offset + FichierRepository::PAGINATOR_PER_PAGE);
+        $nbrePages = ceil(count($paginator) / FichierRepository::PAGINATOR_PER_PAGE);
+        $pageActuelle = ceil($next / FichierRepository::PAGINATOR_PER_PAGE);
+        $difPages = $nbrePages - $pageActuelle;
+        ////////////////////////////////////////////////////////////////////////////
+        foreach ($fichiers_infos as $index => $fichier_info) {
+            $fichiers[$index]["fichier"] = $fichier_info;
+            $fichiers[$index]["site"] = $siteRepository->findOneBy(['id' => $fichier_info->getSite()]);
+            $fichiers[$index]["Date"] = $dateRepository->findOneBy(['id' => $fichier_info->getDate()]);
+        }
+
+        return $this->render('extracteur_images/historique.html.twig', [
+            'fichiers' => $paginator,
+            'previous' => $previous,
+            'next' => $next,
+            'nbrePages' => $nbrePages,
+            'pageActuelle' => $pageActuelle,
+            'difPages' => $difPages,
+            "offset" => $offset,
+            'query' => $search
+        ]);
+    }
+
+    #[Route('/extracteur-images/supp/{id}', name: 'app_extracteur-images_filesupp')]
+    public function admin_supp(FichierRepository $fichierRepository, Fichier $fichier): Response
+    {
+        $outil= $fichier->getOutils();
+        if($outil->getId() === 2){
+
+            $fichierRepository->remove($fichier, true);
+            
+            $this->addFlash('info', 'Le fichier a bien été supprimé');
+            return $this->redirectToRoute('app_extracteur_historique');
+        }
+        return $this->redirectToRoute('app_extracteur_historique');
+
+    }
+
 
     /**
      * affiche le formulaire pour envoyer son fichier xml

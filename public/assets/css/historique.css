@@ -31,3 +31,11 @@
   #searchForm form input {
     margin: 5px;
   }
+
+  .deleteBtn:hover {
+    color:red;
+  }
+
+  .clickIcon{
+    cursor: pointer;
+  }

@@ -63,6 +63,35 @@ class FichierRepository extends ServiceEntityRepository
         }
 
         $query->addOrderBy('c.id', 'DESC')
+        ->AndWhere('c.outils = 1 ')
+            ->setMaxResults(self::PAGINATOR_PER_PAGE)
+            ->setFirstResult($offset)
+            ->getQuery();
+
+        return new Paginator($query);
+    }
+
+
+    
+    public function getFichierPaginatorExtracteurImg(int $offset, array $search = null)
+    {
+        $query = $this->createQueryBuilder('c');
+
+        if($search != null && count($search) > 0){
+            foreach($search as $req){
+                if($req == "date" || $req == "site"){
+                    $query->join('c.'.$req, $req)
+                    ->addOrderBy( $req.".id", 'DESC');
+                } else {
+                    $query->join('c.site', "site")
+                    ->Where('site.nom LIKE :nom')
+                    ->setParameter('nom', '%' . $req . '%');
+                }
+            }
+        }
+
+        $query->addOrderBy('c.id', 'DESC')
+        ->AndWhere('c.outils = 2 ')
             ->setMaxResults(self::PAGINATOR_PER_PAGE)
             ->setFirstResult($offset)
             ->getQuery();

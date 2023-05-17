@@ -266,18 +266,19 @@ class AsynchroneController extends AbstractController
         $site = $siteRepository->findOneBy(['nom' => $nom_blog]);
         $user = $this->getUser();
         if($user){
+            $time= time();
+            $nom_fichier = "images-".$nom_blog."-".$time;
         $entityBody = file_get_contents('php://input');
         $body = json_decode($entityBody, true);
         $zip = new File();
-        $response = $zip->make_zip($body, $nom_blog);
+        $response = $zip->make_zip($body, $nom_blog, $nom_fichier);
       
-        $time= time();
         $current_date = new DateTime();
         $date = new Date();
         $date->setDate($current_date);
         $dateRepository->save($date, true);
 
-        $this->add_file_bdd("images-".$nom_blog.$time, $date, $site, "zip", $fichierRepository, $outilsRepository, "Extrac-thor" );
+        $this->add_file_bdd($nom_fichier.".zip", $date, $site, "zip", $fichierRepository, $outilsRepository, "Extrac-thor" );
         
         return new Response(content: json_encode(['zipFile'=> $response]));
     }

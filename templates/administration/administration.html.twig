@@ -48,10 +48,8 @@
 					</td>
 					<td>
 					{% if app.user.id != user.id %}
-						<i class="fa-solid fa-pen clickIcon" data-toggle="modal" data-target='#modal-1' data-updid="{{user.id}}" title="modifier"></i>
-						<a href="{{ path('app_admin_supp', {id : user.id})}}">
-							<i class="fa-sharp fa-solid fa-circle-xmark clickIcon" data-delid="{{user.id}}" title="supprimer"></i>
-						</a>
+						<i class="fa-solid fa-pen clickIcon updateIcon" data-toggle="modal" data-target='#modal-1' data-updid="{{user.id}}" title="modifier"></i>
+							<i  class="fa-sharp fa-solid fa-circle-xmark clickIcon deleteBtn" data-link="{{ path('app_admin_supp', {id : user.id})}}" data-delid="{{user.id}}" data-delnom="{{user.nom}} {{user.prenom}}" title="supprimer" ></i>
 						{% endif %}
 					</td>
 				</tr>
@@ -75,6 +73,20 @@
 	</div>
 {% endblock %}
 {% block javascripts %}
-	<script src="{{asset('assets/js/modal.js')}}"></script>
+
+<script> 
+ let deleteBtn = document.querySelectorAll('.deleteBtn');
+
+deleteBtn.forEach((btn) => {
+	btn.addEventListener('click', () => {
+	let supp =  window.prompt(`Pour valider la suppression de ${btn.dataset.delnom} tapez "Suppression"`, "")
+	if(supp== "Suppression"){
+		window.location.replace(btn.dataset.link);
+	}
+	})
+
+});
+</script>
+	<script src="{{asset('assets/js/modal.js')}}"></scrip>
 
 {% endblock %}
