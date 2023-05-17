@@ -1,20 +1,134 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HistoriqueController!{% endblock %}
+{% block title %}Sites Enregistrés
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/historique.css')}}" rel="stylesheet"/>
+
+{% endblock %}
+
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	<h1 class="text-center">Sites Enregistrés</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+	<table id="historique-table">
+		<thead>
+			<tr>
+				<th>Site</th>
+				<th>Url</th>
+				<th>Traduction d'article</th>
+				<th>Spin D'article traduits</th>
+				<th>Liste des titres traduits</th>
+				<th>Images extraites d'articles</th>
+				<th></th>
+			</tr>
+		</thead>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/toolbox/src/Controller/HistoriqueController.php'|file_link(0) }}">src/Controller/HistoriqueController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/toolbox/templates/historique/index.html.twig'|file_link(0) }}">templates/historique/index.html.twig</a></code></li>
-    </ul>
-</div>
+		<tbody>
+			{% for site in sites %}
+				<tr>
+					<td>{{site.nom}}</td>
+					<td>{{site.url}}</td>
+					<td>
+						{% for fichier in site.fichiers %}
+							{% if fichier.type == "traduction" %}
+								<a href="/assets/uploads/{{ fichier.type }}_files/{{ fichier.nom_bdd }}">{{ fichier}}</a>
+							{% endif %}
+						{% endfor %}
+					</td>
+					<td>
+						{% for fichier in site.fichiers %}
+							{% if fichier.type == "spin" %}
+								<a href="/assets/uploads/{{ fichier.type }}_files/{{ fichier.nom_bdd }}">{{ fichier}}</a>
+							{% endif %}
+						{% endfor %}
+					</td>
+					<td>
+						{% for fichier in site.fichiers %}
+							{% if fichier.type == "liste" %}
+								<a href="/assets/uploads/{{ fichier.type }}_files/{{ fichier.nom_bdd }}">{{ fichier}}</a>
+							{% endif %}
+						{% endfor %}
+					</td>
+					<td>
+						{% for fichier in site.fichiers %}
+							{% if fichier.type == "zip" %}
+								<a href="/assets/uploads/{{ fichier.type }}_files/{{ fichier.nom_bdd }}">{{ fichier}}</a>
+							{% endif %}
+						{% endfor %}
+					</td>
+					<td>
+						<i class="fa-sharp fa-solid fa-circle-xmark clickIcon deleteBtn" date-delnom="{{site.nom}}" data-link="{{ path('app_sites_filesupp', {id : site.id})}}" title="supprimer"></i>
+
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+
+
+
+<div class="col-12 text-center">
+		{% if previous >= 0 %}
+			<a href="{{ path('app_sites', {offset: previous}) }}" class="btn btn-sm btn-primary m-0 allWaButton">
+				previous
+			</a>
+		{% endif %}
+
+		{% if pageActuelle <= 3 %}
+			{%if pageActuelle > 1 %}
+				{% for i in 2..pageActuelle %}
+					<a href="{{ path('app_sites', {offset: previous - (offset * (pageActuelle - i))})}}" class="btn btn-sm btn-primary m-3 allWaButton">{{ i - 1 }}</a>
+				{% endfor %}
+			{% endif %}
+		{% else %}
+			{% for i in pageActuelle-2..pageActuelle %}
+				<a href="{{ path('app_sites', {offset: previous - (offset * (pageActuelle - i))})}}" class="btn btn-sm btn-primary m-3 allWaButton">{{ i - 1 }}</a>
+			{% endfor %}
+		{% endif %}
+
+
+		<span class="btn btn-sm btn-primary m-3 bg-warning">
+			{{ pageActuelle }}</span>
+
+
+		{% if difPages < 3 %}
+			{% if  difPages > 0 %}
+				{% for i in 1..difPages %}
+					<a href="{{ path('app_sites', {offset: next + (offset * (i - 1)) }) }}" class="btn btn-sm btn-primary m-3 allWaButton">{{ pageActuelle + i }}</a>
+				{% endfor %}
+			{% endif %}
+		{% else %}
+			{% for i in 1..3 %}
+				<a href="{{ path('app_sites', {offset: next + (offset * (i - 1)) }) }}" class="btn btn-sm btn-primary m-3 allWaButton">{{ pageActuelle + i }}</a>
+			{% endfor %}
+		{% endif %}
+
+		{% if next < sites|length %}
+			<a href="{{ path('app_sites', {offset: next }) }}" class="btn btn-sm btn-primary m-0 allWaButton">next
+			</a>
+		{% endif %}
+
+		<p>{{ pageActuelle }}
+			/
+			{{ nbrePages }}</p>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+<script> 
+ let deleteBtn = document.querySelectorAll('.deleteBtn');
+
+deleteBtn.forEach((btn) => {
+	btn.addEventListener('click', () => {
+	let supp =  window.prompt(`Pour valider la suppression du site ${btn.dataset.delnom} et de tous ses fichiers associés tapez "Suppression"`, "")
+	if(supp== "Suppression"){
+		window.location.replace(btn.dataset.link);
+	}
+	})
+
+});
+</script>
 {% endblock %}

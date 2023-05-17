@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sites Enregistrés
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/historique.css')}}" rel="stylesheet"/>
+
+{% endblock %}
+
+
+{% block body %}
+	{{dump(site)}} 
+
+	 {% for fichier in fichiers %}
+	{{dump(fichier)}}
+	{% endfor %} 
+	 {% for date in dates %}
+	{{dump(date)}}
+	{% endfor %} 
+	 {% for element in elements %}
+	{{dump(element)}}
+	{% endfor %}
+
+	
+{% endblock %}

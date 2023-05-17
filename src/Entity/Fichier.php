@@ -155,4 +155,9 @@ class Fichier
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->getNomPourUtilisateur();
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Site;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @extends ServiceEntityRepository<Site>
@@ -16,6 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class SiteRepository extends ServiceEntityRepository
 {
+    public const PAGINATOR_PER_PAGE = 15;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Site::class);
@@ -39,6 +41,15 @@ class SiteRepository extends ServiceEntityRepository
         }
     }
 
+    public function getFichierPaginator(int $offset){
+        $query = $this->createQueryBuilder('c')
+        ->addOrderBy('c.id', 'DESC')
+            ->setMaxResults(self::PAGINATOR_PER_PAGE)
+            ->setFirstResult($offset)
+            ->getQuery();
+
+        return new Paginator($query);
+    }
 //    /**
 //     * @return Site[] Returns an array of Site objects
 //     */

@@ -37,6 +37,8 @@ class SpinnermanController extends AbstractController
             'sites' => $sites
         ]);
     }
+
+
     #[Route('/spinnerman/existing_blog', name: 'app_spinnerman_existing_blog')]
     public function index_existing_blog(Request $request, SiteRepository $siteRepository): Response
     {
@@ -104,7 +106,6 @@ class SpinnermanController extends AbstractController
             return $this->redirectToRoute('app_spinnerman_historique');
         }
         return $this->redirectToRoute('app_spinnerman_historique');
-
     }
 
     private function getListSites(SiteRepository $siteRepository)
