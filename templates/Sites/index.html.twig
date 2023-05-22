@@ -17,19 +17,19 @@
 
 	<div class='alert alert-danger' id="responseMessageBad"></div>
 	<div class='alert alert-success' id="responseMessage"></div>
-	<table id="historique-table">
+	<table id="historique-table" class=" table-striped ">
 		<thead>
 			<tr>
-				<th class="flex-th">Sites
+				<th scope="col" class="flex-th">Sites
 					<label for="selectAll">Tout cocher</label>
 					<input type="checkbox" name="selectAll" id="selectAll">
 				</th>
-				<th>Url</th>
-				<th>Traduction d'article</th>
-				<th>Spin D'article traduits</th>
-				<th>Liste des titres traduits</th>
-				<th>Images extraites d'articles</th>
-				<th>
+				<th scope="col">Url</th>
+				<th scope="col">Traduction d'article</th>
+				<th scope="col">Spin D'article traduits</th>
+				<th scope="col">Liste des titres traduits</th>
+				<th scope="col">Images extraites d'articles</th>
+				<th scope="col">
 					<button id="multiSppBtn" class="btn btn-sm btn-primary m-2 allWaButton">Supprimer les sites séléctionnés</button>
 				</th>
 			</tr>
@@ -39,9 +39,9 @@
 	<iframe id="changeUrlIframe" src="" frameborder="0"></iframe>
         </div>
     </div>
-		<tbody>
+		<tbody >
 			{% for site in sites %}
-				<tr>
+				<tr scope="row">
 					<td><input type="checkbox" class="selectCheckbox" data-id="{{site.id}}" name="select-{{site.id}}" id="select-{{site.id}}">{{site.nom}}</td>
 					<td class="urlBox"><a target="_blank" href="{{site.url}}">{{site.url}}</a>
 						<i class="fa-solid fa-pen clickIcon updateIcon"  data-id="{{site.id}}" title="modifier" data-toggle='modal' data-target='#modal-1'></i>

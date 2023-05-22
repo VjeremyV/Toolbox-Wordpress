@@ -144,3 +144,7 @@ nav ul {
         font-size: 30px;
     }
 } 
+
+table tbody tr:nth-child(2n) {
+    background-color: #e3e5e8;
+  }
