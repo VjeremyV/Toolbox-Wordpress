@@ -1,59 +1,97 @@
 #historique-table tr {
-    border: 1px solid black;
-  }
+  border: 1px solid black;
+}
 
-  td, th {
-    padding: 20px;
-    text-align: center;
-  }
+td,
+th {
+  padding: 20px;
+  text-align: center;
+}
 
-  #historique-table {
-    margin: auto;
-  }
+#historique-table {
+  margin: auto;
+}
 
-  .filterContainer form, .filterContainer form .filterInputContainer, #searchForm {
-    display: flex;
+.filterContainer form,
+.filterContainer form .filterInputContainer,
+#searchForm {
+  display: flex;
 
-  }
-  .filterContainer form  div {
-    padding: 10px;
-  }
+}
 
-  #searchForm {
-    justify-content: center;
-  }
+.filterContainer form div {
+  padding: 10px;
+}
 
-  #searchForm form {
-    margin: 10px;
-    padding: 10px;
-  }
+#searchForm {
+  justify-content: center;
+}
 
-  #searchForm form input {
-    margin: 5px;
-  }
+#searchForm form {
+  margin: 10px;
+  padding: 10px;
+}
 
-  .deleteBtn:hover {
-    color:red;
-  }
+#searchForm form input {
+  margin: 5px;
+}
 
-  .clickIcon{
-    cursor: pointer;
-  }
+.deleteBtn:hover {
+  color: red;
+}
 
-.flex-th{
+.clickIcon {
+  cursor: pointer;
+}
+
+.flex-th {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-td input[type=checkbox]{
+td input[type=checkbox] {
   margin: 5px;
 }
-tr td:nth-child(1n){
+
+tr td:nth-child(1n) {
   text-align: left;
 }
 
 #multiSppBtn {
   display: none;
+}
+
+#responseMessage,
+#responseMessageBad {
+  display: none;
+}
+
+.urlBox {
+  display: flex;
+  align-items: center;
+}
+
+.urlBox i {
+  justify-self: end;
+}
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.75);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.2s;
+}
+
+iframe {
+  width: 100%;
+  height: 300px;
 }

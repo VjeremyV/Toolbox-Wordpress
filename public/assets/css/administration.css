@@ -61,3 +61,17 @@
 .updateIcon:hover{
   color:orange;
 }
+
+#updtCollab{
+  display: flex;
+  flex-wrap : wrap;
+  justify-content: center;
+}
+
+#users_update_form_email{
+  width: 300px;
+}
+
+#updtCollab div {
+  margin: 15px;
+}

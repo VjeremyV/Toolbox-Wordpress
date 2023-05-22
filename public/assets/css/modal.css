@@ -18,10 +18,10 @@
 }
 
 .modal-content{
+    padding: 20px;
     background: white;
     margin: auto;
     width: 60%;
-    height: 300px;
     border-radius: 10px;
     display: flex;
     justify-content: center;
