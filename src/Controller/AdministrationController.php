@@ -23,10 +23,16 @@ class AdministrationController extends AbstractController
         $form = $this->createForm(UsersFormType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->addFlash('info', 'L\'utilisateur a bien été ajouté');
-            $pwd = $passwordHasher->hashPassword($user, $user->getPassword()); // pour hasher le pwd
-            $user->setPassword($pwd);
-            $usersRepository->save($user, true);
+            $isExisting = $usersRepository->findBy(['email' =>$user->getEmail()]);
+            if(count($isExisting) == 0){
+                $this->addFlash('info', 'L\'utilisateur a bien été ajouté');
+                $pwd = $passwordHasher->hashPassword($user, $user->getPassword()); // pour hasher le pwd
+                $user->setPassword($pwd);
+                $usersRepository->save($user, true);
+            } 
+            else {
+                $this->addFlash('wrong', 'Impossible de créer l\'utilisateur, l\'email est déjà utilisé');
+            }
         }
 
         $update_form = $this->createForm(UsersUpdateFormType::class, $update_user);
@@ -88,4 +94,5 @@ class AdministrationController extends AbstractController
         }
         return false;
     }
+ 
 }

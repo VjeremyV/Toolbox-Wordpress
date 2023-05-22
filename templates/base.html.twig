@@ -17,7 +17,6 @@
 		<link rel="stylesheet" href="{{ asset('assets/css/common.css')}}" rel="stylesheet"/>
 
 
-
 	</head>
 
 	<body class="g-sidenav-show  bg-gray-100 w-100 ">
@@ -60,11 +59,23 @@
 						<span class="nav-link-text ms-1" id="{{ (app.request.get('_route') == 'app_plugins') ? 'currentMenuSelected' : ''}}">Plugins</span>
 					</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link text-primary justify-content-center" href="{{path('app_sites')}}">
+						<span class="nav-link-text ms-1" id="{{ (app.request.get('_route') == 'app_sites') ? 'currentMenuSelected' : ''}}">Sites</span>
+					</a>
+				</li>
+				{% if app.user.roles[0] == "ROLE_ADMIN" %}
+					<li class="nav-item">
+						<a class="nav-link text-primary justify-content-center" href="{{path('app_administration')}}">
+							<span class="nav-link-text ms-1" id="{{ (app.request.get('_route') == 'app_administration') ? 'currentMenuSelected' : ''}}">Sites</span>
+						</a>
+					</li>
+				{% endif %}
 				<li class="nav-item d-flex align-items-center">
 					<a class="nav-link text-primary justify-content-center" href="{{path('app_logout')}}">
-						<span class="nav-link-text ms-1" >Deconnexion</span>
+						<span class="nav-link-text ms-1">Deconnexion</span>
 					</a>
-			
+
 				</li>
 			</ul>
 
@@ -98,6 +109,11 @@
 							<span class="nav-link-text ms-1" id="{{ (app.request.get('_route') == 'app_plugins') ? 'currentMenuSelected' : ''}}">Plugins</span>
 						</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link text-white justify-content-center" href="{{path('app_sites')}}">
+							<span class="nav-link-text ms-1" id="{{ (app.request.get('_route') == 'app_sites') ? 'currentMenuSelected' : ''}}">Sites</span>
+						</a>
+					</li>
 
 					{% if app.user.roles[0] == "ROLE_ADMIN" %}
 						<li class="nav-item">
@@ -120,6 +136,17 @@
 				<div
 					class="container-fluid container-md py-4 px-md-5">
 					{# Contenu de la page en cours #}
+					{% block titre %}{% endblock %}
+					{% for message in app.session.flashBag.get('info')%}
+						<div class='alert alert-success'>
+							{{ message }}
+						</div>
+					{% endfor %}
+					{% for message in app.session.flashBag.get('wrong')%}
+						<div class='alert alert-danger'>
+							{{ message }}
+						</div>
+					{% endfor %}
 					{% block body %}{% endblock %}
 				</div>
 

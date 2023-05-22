@@ -8,23 +8,26 @@
 
 {% endblock %}
 
+{% block titre %}	<h1 class="text-center">Sites Enregistrés</h1>
+{% endblock %}
 
 {% block body %}
-	<h1 class="text-center">Sites Enregistrés</h1>
 
 	<table id="historique-table">
 		<thead>
 			<tr>
 				<th class="flex-th">Sites
-				<label for="selectAll">Tout cocher</label>
-				<input type="checkbox" name="selectAll" id="selectAll">
+					<label for="selectAll">Tout cocher</label>
+					<input type="checkbox" name="selectAll" id="selectAll">
 				</th>
 				<th>Url</th>
 				<th>Traduction d'article</th>
 				<th>Spin D'article traduits</th>
 				<th>Liste des titres traduits</th>
 				<th>Images extraites d'articles</th>
-				<th><button id="multiSppBtn"class="btn btn-sm btn-primary m-2 allWaButton">Supprimer les sites séléctionnés</button></th>
+				<th>
+					<button id="multiSppBtn" class="btn btn-sm btn-primary m-2 allWaButton">Supprimer les sites séléctionnés</button>
+				</th>
 			</tr>
 		</thead>
 
@@ -71,9 +74,7 @@
 	</table>
 
 
-
-
-<div class="col-12 text-center">
+	<div class="col-12 text-center">
 		{% if previous >= 0 %}
 			<a href="{{ path('app_sites', {offset: previous}) }}" class="btn btn-sm btn-primary m-0 allWaButton">
 				previous
@@ -121,19 +122,21 @@
 {% endblock %}
 
 {% block javascripts %}
-<script> 
- let deleteBtn = document.querySelectorAll('.deleteBtn');
+	<script>
+		let deleteBtn = document.querySelectorAll('.deleteBtn');
 
 deleteBtn.forEach((btn) => {
-	btn.addEventListener('click', () => {
-	let supp =  window.prompt(`Pour valider la suppression du site ${btn.dataset.delnom} et de tous ses fichiers associés tapez "Suppression"`, "")
-	if(supp== "Suppression"){
-		window.location.replace(btn.dataset.link);
-	}
-	})
+btn.addEventListener('click', () => {
+let supp = window.prompt (`Pour valider la suppression du site ${
+btn.dataset.delnom
+} et de tous ses fichiers associés tapez "Suppression"`, "")
+if (supp == "Suppression") {
+window.location.replace(btn.dataset.link);
+}
+})
 
 });
-</script>
+	</script>
 	<script src="{{ asset('assets/js/sites.js')}}"></script>
 
 {% endblock %}
