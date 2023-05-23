@@ -64,6 +64,11 @@
 						<span class="nav-link-text ms-1" id="{{ (app.request.get('_route') == 'app_sites') ? 'currentMenuSelected' : ''}}">Sites</span>
 					</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link text-primary justify-content-center" href="{{path('app_b64')}}">
+						<span class="nav-link-text ms-1" id="{{ (app.request.get('_route') == 'app_b64') ? 'currentMenuSelected' : ''}}">Convertisseur B'Hulk 64</span>
+					</a>
+				</li>
 				{% if app.user.roles[0] == "ROLE_ADMIN" %}
 					<li class="nav-item">
 						<a class="nav-link text-primary justify-content-center" href="{{path('app_administration')}}">
@@ -112,6 +117,11 @@
 					<li class="nav-item">
 						<a class="nav-link text-white justify-content-center" href="{{path('app_sites')}}">
 							<span class="nav-link-text ms-1" id="{{ (app.request.get('_route') == 'app_sites') ? 'currentMenuSelected' : ''}}">Sites</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-white justify-content-center" href="{{path('app_b64')}}">
+							<span class="nav-link-text ms-1" id="{{ (app.request.get('_route') == 'app_b64') ? 'currentMenuSelected' : ''}}">Convertisseur B'Hulk 64</span>
 						</a>
 					</li>
 

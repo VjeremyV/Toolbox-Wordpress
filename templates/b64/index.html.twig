@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Convertisseur B64{% endblock %}
+
+{% block titre %}	
+<h1 class="text-center">Convertisseur B64</h1>
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/b64.css')}}" rel="stylesheet"/>
+
+{% endblock %}
+{% block body %}
+
+<h2>Pour une URL</h2>
+    <div class="url-translater d-flex">
+      <div class="inputContainer">
+        <label for="URL">URL à encoder</label>
+        <input type="text" id="URL" />
+      </div>
+      <div class="inputContainer">
+        <label for="B64">équivalent en B64</label>
+        <input type="text" id="B64" />
+      </div>
+    </div>
+    <h2>Multiples URL</h2>
+    <div class="url-translater">
+      <div class="inputContainer">
+        <textarea name="URLs" id="URLs" placeholder="URLs à encoder"></textarea>
+      </div>
+      <div class="inputContainer">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col" class="col-2">ID</th>
+              <th scope="col" class="col-5">URL</th>
+              <th scope="col" class="col-5">b64</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="btnContainer">
+        <button id="transformBtn" class="btn btn-primary">Transformer</button>
+      </div>
+    </div>
+
+    <div class="instructions d-flex flex-wrap justify-content-around align-items-start ">
+      <div class="border-end">
+        <h2>Etape 1</h2>
+        <p>
+          On convertit le lien en base 64. on ajoute une class, ici "qcd" et un
+          "data-NomDeLaClass" avec l'url encodée en base 64.
+        </p>
+        <div class="bigContainer">
+          <code class="codeContainer">
+            &lt;span class="qcd"
+            data-qcd="aHR0cHM6Ly93d3cuNDEwLWdvbmUuZnIvYS1wcm9wb3MuaHRtbA==" &gt;
+            mentions légales &lt;/span&gt;
+          </code>
+        </div>
+        <br>
+      <h2>Etape 2</h2>
+      <p>
+        On ajoute le code js, ci-dessou qui va pointer sur les éléments
+        possedant la class ajoutée précédement et lire interpréter l'url encodée
+        en base 64
+      </p>
+      <div class="bigContainer">
+        <code class="codeContainer">
+          <pre>
+            document.addEventListener("DOMContentLoaded", function (event) {
+              var classname = document.getElementsByClassName("qcd");
+              for (var i = 0; i < classname.length; i++) {
+                //click gauche
+                classname[i].addEventListener("click", myFunction, false);
+                //click droit
+                classname[i].addEventListener("contextmenu", myRightFunction, false);
+              }
+            });
+            
+            //fonction du click gauche
+            var myFunction = function (event) {
+              var attribute = this.getAttribute("data-qcd");
+              if (event.ctrlKey) {
+                var newWindow = window.open(
+                decodeURIComponent(window.atob(attribute)),"_blank");
+                newWindow.focus();
+              } else {
+                document.location.href = decodeURIComponent(window.atob(attribute));
+              }
+            };
+                        
+            //fonction du click droit
+            var myRightFunction = function (event) {
+              var attribute = this.getAttribute("data-qcd");
+              if (event.ctrlKey) {
+                var newWindow = window.open(decodeURIComponent(window.atob(attribute)),"_blank");
+                newWindow.focus();
+              } else {
+                window.open(decodeURIComponent(window.atob(attribute)), "_blank");
+              }
+            };
+                      </pre
+          >
+        </code>
+      </div>
+    </div>
+    <div>
+      <h2>Etape 3</h2>
+      <p>On ajoute du css pour styliser nos liens</p>
+      <div class="bigContainer">
+        <code class="codeContainer">
+          <pre>
+            .qcd:hover {
+              text-decoration: underline;
+              cursor: pointer;
+            }
+          </pre>
+        </code>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+	
+	<script src="{{ asset('assets/js/b64.js')}}"></script>
+
+{% endblock %}

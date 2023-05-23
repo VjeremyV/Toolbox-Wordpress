@@ -10,25 +10,37 @@
 {% endblock %}
 
 
-{% block titre %}	
+{% block titre %}
 	<h1 class="text-center pb-5">Plugins Wordpress</h1>
 {% endblock %}
 
 {% block body %}
 
-<div class="container mt-5">
-	<div class="card">
-		<h5 class="card-header">Auto-Featured-Imgs</h5>
-		<div class="card-body row">
-        <div class="col-md-4">
-			<p class="card-text">Etablie la liste des articles n'ayant pas d'images mise en avant et permet de faire une requête d'image par article à la banque         d'images pixabay.</p>
-			<a href="{{ asset('plugins/Auto-Featured-Imgs.zip')}}" class="btn btn-primary">Télécharger</a>
-        </div>
-        <div class="col-md-8 plugImgs">
-        <img src="{{ asset('assets/img/plugins/Auto-Featured-Imgs.PNG')}}" alt=""></div>
+	<div class="container mt-5">
+		<div class="card">
+			<h5 class="card-header">Auto-Featured-Imgs</h5>
+			<div class="card-body row">
+				<div class="col-md-4">
+					<p class="card-text">Etablie la liste des articles n'ayant pas d'images mise en avant et permet de faire une requête d'image par article à la banque         d'images pixabay.</p>
+					<a href="{{ asset('plugins/Auto-Featured-Imgs.zip')}}" class="btn btn-primary">Télécharger</a>
+				</div>
+				<div class="col-md-8 plugImgs">
+					<img src="{{ asset('assets/img/plugins/Auto-Featured-Imgs.PNG')}}" alt=""></div>
+			</div>
+		</div>
+		<div class="card mt-5">
+			<h5 class="card-header text-right">Clean-After-Import</h5>
+			<div class="card-body row">
+
+				<div class="col-md-8 plugImgs">
+					<img src="{{ asset('assets/img/plugins/Auto-Featured-Imgs.PNG')}}" alt=""></div>
+			<div class="col-md-4">
+				<p class="card-text">Nettoie la base de donnée du wordpress après l'import des textes pour éviter d'avoir un footprint avec le site d'origine.</p>
+				<a href="{{ asset('plugins/Auto-Featured-Imgs.zip')}}" class="btn btn-primary">Télécharger</a>
+			</div>
+			</div>
 		</div>
 	</div>
-</div>
 
 {% endblock %}
 

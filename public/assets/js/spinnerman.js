@@ -41,6 +41,8 @@ import{
     //On ajoute la class web au spidercontainer pour que les règles css fassent apparaitre l'animation de l'araignée
     spiderContainer.classList.add("web");
     translateProgress.innerHTML = `<span class="font-weight-bold m-3">Traduction en cours ...</span>`;
+    
+    console.log(xml)
 
     fetch("/translate/" + nomBlog.value, {
       ...options,

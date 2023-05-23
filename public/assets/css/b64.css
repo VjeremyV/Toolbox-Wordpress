@@ -1,0 +1,66 @@
+* {
+  list-style-type: none;
+}
+h2{
+  text-align: center;
+}
+.url-translater {
+  padding: 50px;
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin: 10px;
+}
+
+input[type=text] {
+  width: 500px;
+}
+
+.instructions{
+text-align: center;
+}
+
+.codeContainer{
+padding: 10px;
+margin: 10px;
+color: white;
+  background: black;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.bigContainer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+textarea{
+  min-width: 500px;
+  height: 500px;
+  width: 100%;
+  resize: none;
+}
+.btnContainer{
+  width: 100%;
+  text-align: center;
+}
+
+td,th ,tr{
+  border: 1px solid black;
+}
+th{
+  background: rgba(114, 106, 106, 0.644);
+}
+
+table{
+  border-collapse: collapse;
+
+}
+
+.copyText, #B64{
+  cursor: pointer;
+}
