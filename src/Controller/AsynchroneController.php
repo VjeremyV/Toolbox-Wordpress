@@ -37,47 +37,30 @@ class AsynchroneController extends AbstractController
             $txtFile = []; //tableau qui contiendra les données à inscrire dans le fichier txt
 
             //on vérifie si le site n'existe pas déjà en bdd, sinon on le créée
-            if (self::is_new($nom_blog, $siteRepository)) {
-                $site = new Site();
-                $site->setNom($nom_blog);
-                $site->setUrl("");
-                $siteRepository->save($site, true);
-            } else {
-                $site = $siteRepository->findBy(['nom' => $nom_blog])[0];
-            }
-
+            $site = self::is_new($nom_blog, $siteRepository);
 
             // Pour chaque post du corp de la requete
             foreach ($body as $post) {
                 foreach ($post as $element => $value) {
-                    //si l'élément n'est pas la date
                     if ($element != "date") {
-                        // si l'élément est l'url on transforme l'URL en slug pour la traduction
                         if ($element === "url") {
                             $value = self::urlToSlug($value);
                         }
                         //On traduit la valeur en anglais
                         $traductValue = $translator->getTranslate($value, $this->getParameter('DEEPL_API'));
-
-
-                        // on ajoute la valeur traduite dans le tableau de résultat
                         $result['translate-' . $count][$element] = $traductValue;
 
-                        // si l'élément est le h1
+                        //on ajoute au tableau qui contiendra les éléments du fichier texte la valeur en français suivie de la valeur en anglais
                         if ($element === "h1") {
-                            //on ajoute au tableau qui contiendra les éléments du fichier texte la valeur en français suivie de la valeur en anglais
                             $txtFile['translate-' . $count][$element] = $value;
                             $txtFile['translate-' . $count]['traduction'] = $traductValue;
                         }
-                        // puis on ajoute la traduction du h1 dans le tableau de resultat
-                        $result['translate-' . $count][$element] = $traductValue;
                     } else {
                         //si la date n'est pas vide
+                        //on l'ajoute au tableau qui contiendra les éléments du fichier text
                         if ($value != "") {
-                            //on l'ajoute au tableau qui contiendra les éléments du fichier text
                             $txtFile['translate-' . $count][$element] = $value;
                         } else {
-                            // sinon on ajoute la valeur suivante
                             $txtFile['translate-' . $count][$element] = "pas de date renseignée ou pas publié";
                         }
                     }
@@ -242,22 +225,30 @@ class AsynchroneController extends AbstractController
     }
 
     /**
-     * Vérifie si le nom du blog existe ou non en bdd
+     * Vérifie si le nom du blog existe ou non en bdd et le créée si il ne l'est pas
      *
      * @param string $name
      * @param SiteRepository $siteRepository
-     * @return boolean
+     * @return Site
      */
-    public static function is_new(string $name, SiteRepository $siteRepository)
+    public static function is_new(string $name, SiteRepository $siteRepository):Site
     {
+        $siteEntity = "";
         $sites = $siteRepository->findAll();
         foreach ($sites as $site) {
             if ($site->getNom() === $name) {
-                return false;
+                $siteEntity = $site;
             }
         }
-        return true;
+        if($siteEntity === ""){
+            $siteEntity = new Site();
+                $siteEntity->setNom($name);
+                $siteEntity->setUrl("");
+                $siteRepository->save($siteEntity, true);
+        }
+        return $siteEntity;
     }
+
 
 
 

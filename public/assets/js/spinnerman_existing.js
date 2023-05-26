@@ -1,5 +1,5 @@
 import {
-  retrieveData,
+  spinData,
   get_existing_traduction_files,
   clean_data,
   end_process,
@@ -47,7 +47,7 @@ import { searchStates } from "./autocomplete.js";
         return res.json();
       })
       .then((data) => {
-        retrieveData(data, options, spinProgress)
+        spinData(data, options, spinProgress)
           .then((res) => {
             let clean_spinned_array = clean_data(res);
             spinProgress.innerHTML = `<span class="font-weight-bold alert text-success m-3"><i class="fa-solid fa-check"></i> Spin Terminé</span>`;
