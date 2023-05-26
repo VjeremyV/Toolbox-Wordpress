@@ -25,7 +25,12 @@ Actuellement, 3 fonctionnalités sont proposées :
    - Retourne une archive .zip contenant les images rangées selon l'arborescence des dossiers du FTP du wordpress
    
 - Un onglet plugins
-  contient l'ensemble des plugisn développés sur mesure pour des projets clients : 
+  contient un ensemble de plugins Wordpress développés sur mesure : 
     - Auto-Featured-Imgs : plugin qui établie la liste des articles n'ayant pas d'images mise en avant et permet de faire une requête d'image par article à la banque         d'images pixabay.
+    -	Clean-After-Import : Plugin permettant de nettoyer la base de données des anciennes URLs d’articles importés depuis un autre site.
+
+- Un encodeur B64 : 
+  transforme à la volée une URL dans son équivalent en base 64 avec un process d'intégration sur le site.
+
     
     
