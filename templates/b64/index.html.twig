@@ -13,7 +13,7 @@
 {% block body %}
 
 <h2>Pour une URL</h2>
-    <div class="url-translater d-flex">
+    <div class="url-translater d-flex flex-wrap">
       <div class="inputContainer">
         <label for="URL">URL à encoder</label>
         <input type="text" id="URL" />
@@ -47,14 +47,14 @@
     </div>
 
     <div class="instructions d-flex flex-wrap justify-content-around align-items-start ">
-      <div class="border-end">
+      <div class="border-end container">
         <h2>Etape 1</h2>
         <p>
           On convertit le lien en base 64. on ajoute une class, ici "qcd" et un
           "data-NomDeLaClass" avec l'url encodée en base 64.
         </p>
         <div class="bigContainer">
-          <code class="codeContainer">
+          <code class="codeContainer container">
             &lt;span class="qcd"
             data-qcd="aHR0cHM6Ly93d3cuNDEwLWdvbmUuZnIvYS1wcm9wb3MuaHRtbA==" &gt;
             mentions légales &lt;/span&gt;
@@ -68,7 +68,7 @@
         en base 64
       </p>
       <div class="bigContainer">
-        <code class="codeContainer">
+        <code class="codeContainer container">
           <pre>
             document.addEventListener("DOMContentLoaded", function (event) {
               var classname = document.getElementsByClassName("qcd");
@@ -111,7 +111,7 @@
       <h2>Etape 3</h2>
       <p>On ajoute du css pour styliser nos liens</p>
       <div class="bigContainer">
-        <code class="codeContainer">
+        <code class="codeContainer container">
           <pre>
             .qcd:hover {
               text-decoration: underline;

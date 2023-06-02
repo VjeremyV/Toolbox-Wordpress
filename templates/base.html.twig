@@ -72,7 +72,7 @@
 				{% if app.user.roles[0] == "ROLE_ADMIN" %}
 					<li class="nav-item">
 						<a class="nav-link text-primary justify-content-center" href="{{path('app_administration')}}">
-							<span class="nav-link-text ms-1" id="{{ (app.request.get('_route') == 'app_administration') ? 'currentMenuSelected' : ''}}">Sites</span>
+							<span class="nav-link-text ms-1" id="{{ (app.request.get('_route') == 'app_administration') ? 'currentMenuSelected' : ''}}">Administration</span>
 						</a>
 					</li>
 				{% endif %}
@@ -135,7 +135,9 @@
 				</ul>
 			</div>
 		</aside>
+		<div class="text-center"> 
 		<img src="{{ asset('assets/img/logo/logo_wa_couleur.png')}}" alt="" class="d-lg-none">
+		</div>
 		<main class="main-content border-radius-lg ">
 
 

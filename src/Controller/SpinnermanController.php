@@ -19,22 +19,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Site;
 
+
 class SpinnermanController extends AbstractController
 {
     #[Route('/spinnerman', name: 'app_spinnerman')]
     public function index(Request $request, SiteRepository $siteRepository): Response
     {
-        // on créée le formulaire
-        $NewFileForm = self::displayNewFileForm();
-        //on vérifie la request pour saovir si le formulaire a été soumis
-        $NewFileForm->handleRequest($request);
-        $xml = self::formTreatment($NewFileForm, $siteRepository);
-        $sites = $siteRepository->findAll();
+
+        $NewFileForm = self::displayNewFileForm(); 
+        $NewFileForm->handleRequest($request); 
+        $xml = self::formTreatment($NewFileForm, $siteRepository); 
 
         return $this->render('spinnerman/spinnerman.html.twig', [
             'NewFileForm' => $NewFileForm->createView(),
-            'xml' => $xml,
-            'sites' => $sites
+            'xml' => $xml
         ]);
     }
 
@@ -56,6 +54,7 @@ class SpinnermanController extends AbstractController
     #[Route('/spinnerman/historique', name: 'app_spinnerman_historique')]
     public function index_historique(FichierRepository $fichierRepository, SiteRepository $siteRepository, DateRepository $dateRepository, request $request): Response
     {
+        
         $fichiers_infos = $fichierRepository->findBy(['outils' => 1]);
         $fichiers = [];
         $query = $request->query;

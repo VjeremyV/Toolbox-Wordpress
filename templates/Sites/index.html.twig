@@ -17,74 +17,94 @@
 
 	<div class='alert alert-danger' id="responseMessageBad"></div>
 	<div class='alert alert-success' id="responseMessage"></div>
-	<table id="historique-table" class=" table-striped ">
-		<thead>
-			<tr>
-				<th scope="col" class="flex-th">Sites
-					<label for="selectAll">Tout cocher</label>
-					<input type="checkbox" name="selectAll" id="selectAll">
-				</th>
-				<th scope="col">Url</th>
-				<th scope="col">Traduction d'article</th>
-				<th scope="col">Spin D'article traduits</th>
-				<th scope="col">Liste des titres traduits</th>
-				<th scope="col">Images extraites d'articles</th>
-				<th scope="col">
-					<button id="multiSppBtn" class="btn btn-sm btn-primary m-2 allWaButton">Supprimer les sites séléctionnés</button>
-				</th>
-			</tr>
-		</thead>
-  <div class="modal" id="modal-1">
-        <div class="modal-content">
-	<iframe id="changeUrlIframe" src="" frameborder="0"></iframe>
-        </div>
-    </div>
-		<tbody >
-			{% for site in sites %}
-				<tr scope="row">
-					<td><input type="checkbox" class="selectCheckbox" data-id="{{site.id}}" name="select-{{site.id}}" id="select-{{site.id}}">{{site.nom}}</td>
-					<td class="urlBox"><a target="_blank" href="{{site.url}}">{{site.url}}</a>
-						<i class="fa-solid fa-pen clickIcon updateIcon"  data-id="{{site.id}}" title="modifier" data-toggle='modal' data-target='#modal-1'></i>
-					</td>
-					<td>
-						{% for fichier in site.fichiers %}
-							{% if fichier.type == "traduction" %}
-								<a href="/assets/uploads/{{ fichier.type }}_files/{{ fichier.nom_bdd }}">{{ fichier}}</a>
-							{% endif %}
-						{% endfor %}
-					</td>
-					<td>
-						{% for fichier in site.fichiers %}
-							{% if fichier.type == "spin" %}
-								<a href="/assets/uploads/{{ fichier.type }}_files/{{ fichier.nom_bdd }}">{{ fichier}}</a>
-							{% endif %}
-						{% endfor %}
-					</td>
-					<td>
-						{% for fichier in site.fichiers %}
-							{% if fichier.type == "liste" %}
-								<a href="/assets/uploads/{{ fichier.type }}_files/{{ fichier.nom_bdd }}">{{ fichier}}</a>
-							{% endif %}
-						{% endfor %}
-					</td>
-					<td>
-						{% for fichier in site.fichiers %}
-							{% if fichier.type == "zip" %}
-								<a href="/assets/uploads/{{ fichier.type }}_files/{{ fichier.nom_bdd }}">{{ fichier}}</a>
-							{% endif %}
-						{% endfor %}
-					</td>
-					<td>
+	{% if is_mobile() or is_tablet() %}
+		{% for site in sites %}
+			<div class="card m-auto mb-4" style="width: 18rem;">
+				<div class="card-body text-center">
+					<h5 class="card-title border-bottom mb-3 pb-3">{{site.nom}}
 						<i class="fa-sharp fa-solid fa-circle-xmark clickIcon deleteBtn" date-delnom="{{site.nom}}" data-link="{{ path('app_sites_filesupp', {id : site.id})}}" title="supprimer"></i>
+						({{site.url}}
+						<i class="fa-solid fa-pen clickIcon updateIcon" data-id="{{site.id}}" title="modifier" data-toggle='modal' data-target='#modal-1'></i>)</h5>
 
-					</td>
+					{% for fichier in site.fichiers %}
+						<div class="border-bottom mb-3 pb-3">
+							<h6 class="card-subtitle mb-2 text-muted">{{ fichier.Date.date|date("d/m/Y") }}</h6>
+							<p class="card-text">{{ fichier.type }}</p>
+							<a href="/assets/uploads/{{ fichier.type }}s/{{ fichier.nom_bdd }}" class="card-link">{{ fichier.nom_pour_utilisateur }}</a>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		{% endfor %}
+	{% else %}
+		<table id="historique-table" class=" table-striped ">
+			<thead>
+				<tr>
+					<th scope="col" class="flex-th">Sites
+						<label for="selectAll">Tout cocher</label>
+						<input type="checkbox" name="selectAll" id="selectAll">
+					</th>
+					<th scope="col">Url</th>
+					<th scope="col">Traduction d'article</th>
+					<th scope="col">Spin D'article traduits</th>
+					<th scope="col">Liste des titres traduits</th>
+					<th scope="col">Images extraites d'articles</th>
+					<th scope="col">
+						<button id="multiSppBtn" class="btn btn-sm btn-primary m-2 allWaButton">Supprimer les sites séléctionnés</button>
+					</th>
 				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+			</thead>
+		
+			<tbody>
+				{% for site in sites %}
+					<tr scope="row">
+						<td><input type="checkbox" class="selectCheckbox" data-id="{{site.id}}" name="select-{{site.id}}" id="select-{{site.id}}">{{site.nom}}</td>
+						<td class="urlBox">
+							<a target="_blank" href="{{site.url}}">{{site.url}}</a>
+							<i class="fa-solid fa-pen clickIcon updateIcon" data-id="{{site.id}}" title="modifier" data-toggle='modal' data-target='#modal-1'></i>
+						</td>
+						<td>
+							{% for fichier in site.fichiers %}
+								{% if fichier.type == "traduction" %}
+									<a href="/assets/uploads/{{ fichier.type }}_files/{{ fichier.nom_bdd }}">{{ fichier}}</a>
+								{% endif %}
+							{% endfor %}
+						</td>
+						<td>
+							{% for fichier in site.fichiers %}
+								{% if fichier.type == "spin" %}
+									<a href="/assets/uploads/{{ fichier.type }}_files/{{ fichier.nom_bdd }}">{{ fichier}}</a>
+								{% endif %}
+							{% endfor %}
+						</td>
+						<td>
+							{% for fichier in site.fichiers %}
+								{% if fichier.type == "liste" %}
+									<a href="/assets/uploads/{{ fichier.type }}_files/{{ fichier.nom_bdd }}">{{ fichier}}</a>
+								{% endif %}
+							{% endfor %}
+						</td>
+						<td>
+							{% for fichier in site.fichiers %}
+								{% if fichier.type == "zip" %}
+									<a href="/assets/uploads/{{ fichier.type }}_files/{{ fichier.nom_bdd }}">{{ fichier}}</a>
+								{% endif %}
+							{% endfor %}
+						</td>
+						<td>
+							<i class="fa-sharp fa-solid fa-circle-xmark clickIcon deleteBtn" date-delnom="{{site.nom}}" data-link="{{ path('app_sites_filesupp', {id : site.id})}}" title="supprimer"></i>
 
-
- 
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+	<div class="modal" id="modal-1">
+		<div class="modal-content">
+			<iframe id="changeUrlIframe" src="" frameborder="0"></iframe>
+		</div>
+	</div>
 
 	<div class="col-12 text-center">
 		{% if previous >= 0 %}

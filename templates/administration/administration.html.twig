@@ -9,7 +9,8 @@
 	<link rel="stylesheet" href="{{ asset('assets/css/modal.css')}}" rel="stylesheet"/>
 
 {% endblock %}
-{% block titre %}		<h1 class="text-center">Administration</h1>
+{% block titre %}
+	<h1 class="text-center">Administration</h1>
 
 {% endblock %}
 {% block body %}
@@ -22,44 +23,70 @@
 	</section>
 	<section>
 		<h2>Collaborateurs enregistrés</h2>
-		<table>
-			<thead>
-				<tr>
-					<th>Nom</th>
-					<th>Prénom</th>
-					<th>Email</th>
-					<th>Rôle</th>
-					<th>Actions</th>
-				</tr>
-
-			</thead>
+		{% if is_mobile() or is_tablet() %}
 			{% for user in users %}
-
-				<tr>
-
-					<td class="nom-{{user.id}}">{{user.nom}}</td>
-					<td class="prenom-{{user.id}}">{{user.prenom}}</td>
-					<td class="email-{{user.id}}">{{user.email}}</td>
-					<td class="roles-{{user.id}}">
-						{% if user.roles[0] == "ROLE_ADMIN" %}
-							Admin
-						{% elseif user.roles[0] == "ROLE_USER" %}
-							Collaborateur
+				<div class="card m-auto mb-4" style="width: 18rem;">
+					<div class="card-body text-center">
+						<h5 class="card-title"><span class="nom-{{user.id}}"> {{user.nom}}</span>
+							-
+							<span class="prenom-{{user.id}}">{{user.prenom}}</span></h5>
+						<h6 class="card-subtitle mb-2 text-muted"><span class="email-{{user.id}}">{{user.email}}</span></h6>
+						<p class="card-text"><span class="roles-{{user.id}}">
+							{% if user.roles[0] == "ROLE_ADMIN" %}
+								Admin
+							{% elseif user.roles[0] == "ROLE_USER" %}
+								Collaborateur
+							{% endif %}
+							</span>
+						</p>
+						{% if app.user.id != user.id %}
+							<i class="fa-solid fa-pen clickIcon updateIcon" data-toggle="modal" data-target='#modal-1' data-updid="{{user.id}}" title="modifier"></i>
+							<i class="fa-sharp fa-solid fa-circle-xmark clickIcon deleteBtn" data-link="{{ path('app_admin_supp', {id : user.id})}}" data-delid="{{user.id}}" data-delnom="{{user.nom}} {{user.prenom}}" title="supprimer"></i>
 						{% endif %}
-
-					</td>
-					<td>
-					{% if app.user.id != user.id %}
-						<i class="fa-solid fa-pen clickIcon updateIcon" data-toggle="modal" data-target='#modal-1' data-updid="{{user.id}}" title="modifier"></i>
-							<i  class="fa-sharp fa-solid fa-circle-xmark clickIcon deleteBtn" data-link="{{ path('app_admin_supp', {id : user.id})}}" data-delid="{{user.id}}" data-delnom="{{user.nom}} {{user.prenom}}" title="supprimer" ></i>
-						{% endif %}
-					</td>
-				</tr>
-
+					</div>
+				</div>
 			{% endfor %}
-		</table>
+		{% else %}
+			<table>
+				<thead>
+					<tr>
+						<th>Nom</th>
+						<th>Prénom</th>
+						<th>Email</th>
+						<th>Rôle</th>
+						<th>Actions</th>
+					</tr>
+
+				</thead>
+				{% for user in users %}
+
+					<tr>
+
+						<td class="nom-{{user.id}}">{{user.nom}}</td>
+						<td class="prenom-{{user.id}}">{{user.prenom}}</td>
+						<td class="email-{{user.id}}">{{user.email}}</td>
+						<td class="roles-{{user.id}}">
+							{% if user.roles[0] == "ROLE_ADMIN" %}
+								Admin
+							{% elseif user.roles[0] == "ROLE_USER" %}
+								Collaborateur
+							{% endif %}
+
+						</td>
+						<td>
+							{% if app.user.id != user.id %}
+								<i class="fa-solid fa-pen clickIcon updateIcon" data-toggle="modal" data-target='#modal-1' data-updid="{{user.id}}" title="modifier"></i>
+								<i class="fa-sharp fa-solid fa-circle-xmark clickIcon deleteBtn" data-link="{{ path('app_admin_supp', {id : user.id})}}" data-delid="{{user.id}}" data-delnom="{{user.nom}} {{user.prenom}}" title="supprimer"></i>
+							{% endif %}
+						</td>
+					</tr>
+
+				{% endfor %}
+			</table>
+
+		{% endif %}
 	</section>
-		
+
 	<div class="modal" id="modal-1">
 		<div class="modal-content">
 			{{ form_start(update_form, {'attr': {'id': 'updtCollab'}}) }}
@@ -75,23 +102,24 @@
 	</div>
 
 
-	
 {% endblock %}
 {% block javascripts %}
 
-<script> 
- let deleteBtn = document.querySelectorAll('.deleteBtn');
+	<script>
+		let deleteBtn = document.querySelectorAll('.deleteBtn');
 
 deleteBtn.forEach((btn) => {
-	btn.addEventListener('click', () => {
-	let supp =  window.prompt(`Pour valider la suppression de ${btn.dataset.delnom} tapez "Suppression"`, "")
-	if(supp== "Suppression"){
-		window.location.replace(btn.dataset.link);
-	}
-	})
+btn.addEventListener('click', () => {
+let supp = window.prompt (`Pour valider la suppression de ${
+btn.dataset.delnom
+} tapez "Suppression"`, "")
+if (supp == "Suppression") {
+window.location.replace(btn.dataset.link);
+}
+})
 
 });
-</script>
-	<script src="{{asset('assets/js/administration.js')}}"></scrip>
+	</script>
+	<script src="{{asset('assets/js/administration.js')}}"></script>
 
 {% endblock %}

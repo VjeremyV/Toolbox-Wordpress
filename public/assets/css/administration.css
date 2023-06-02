@@ -46,12 +46,16 @@
   #addCollab{
     display: flex;
     align-items: center;
+    justify-content: center;
+    flex-wrap : wrap;
   }
 
   #addCollab div{
     padding: 10px;
     display: flex ;
     align-items: center;
+    flex-wrap : wrap;
+
   }
 
   .deleteBtn:hover {
@@ -74,4 +78,17 @@
 
 #updtCollab div {
   margin: 15px;
+}
+@media screen and (max-width : 700px){
+  #addCollab div{
+    justify-content: center;
+    flex-direction: column;
+  }
+  h2{
+    text-align: center;
+  }
+
+  .modal-content{
+    width: 90% !important;
+  }
 }

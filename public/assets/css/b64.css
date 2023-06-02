@@ -64,3 +64,12 @@ table{
 .copyText, #B64{
   cursor: pointer;
 }
+
+@media screen and (max-width: 700px){
+  input[type=text] {
+    width: auto;
+  }
+  textarea{
+    min-width: auto;
+  }
+}
