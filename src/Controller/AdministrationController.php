@@ -11,7 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+
+#[IsGranted('ROLE_USER')]
 class AdministrationController extends AbstractController
 {
     #[Route('/administration', name: 'app_administration')]
@@ -23,14 +26,13 @@ class AdministrationController extends AbstractController
         $form = $this->createForm(UsersFormType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $isExisting = $usersRepository->findBy(['email' =>$user->getEmail()]);
-            if(count($isExisting) == 0){
+            $isExisting = $usersRepository->findBy(['email' => $user->getEmail()]);
+            if (count($isExisting) == 0) {
                 $this->addFlash('info', 'L\'utilisateur a bien été ajouté');
                 $pwd = $passwordHasher->hashPassword($user, $user->getPassword()); // pour hasher le pwd
                 $user->setPassword($pwd);
                 $usersRepository->save($user, true);
-            } 
-            else {
+            } else {
                 $this->addFlash('wrong', 'Impossible de créer l\'utilisateur, l\'email est déjà utilisé');
             }
         }
@@ -94,5 +96,4 @@ class AdministrationController extends AbstractController
         }
         return false;
     }
- 
 }

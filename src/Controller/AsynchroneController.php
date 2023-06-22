@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Classes\File;
 use App\Classes\TranslatorWa;
 use App\Entity\Date;
@@ -22,6 +23,7 @@ use Exception;
 class AsynchroneController extends AbstractController
 {
     #[Route('/translate/{nom_blog}', name: 'app_translate', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
     public function index(string $nom_blog, Request $request, SiteRepository $siteRepository, FichierRepository $fichierRepository, DateRepository $dateRepository, OutilsRepository $outilsRepository): Response
     {
         $user = $this->getUser();

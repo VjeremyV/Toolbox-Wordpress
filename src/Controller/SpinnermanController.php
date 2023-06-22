@@ -9,30 +9,25 @@ use App\Repository\DateRepository;
 use App\Repository\FichierRepository;
 use App\Repository\SiteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Site;
-
 
 class SpinnermanController extends AbstractController
 {
     #[Route('/spinnerman', name: 'app_spinnerman')]
     public function index(Request $request, SiteRepository $siteRepository): Response
     {
-
         $NewFileForm = self::displayNewFileForm(); 
         $NewFileForm->handleRequest($request); 
         $xml = self::formTreatment($NewFileForm, $siteRepository); 
 
         return $this->render('spinnerman/spinnerman.html.twig', [
             'NewFileForm' => $NewFileForm->createView(),
-            'xml' => $xml
+            'xml' => $xml,
         ]);
     }
 

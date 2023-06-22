@@ -26,7 +26,11 @@ async function spinData(data, options, messagecontainer) {
       .then((res) => res.json())
       .catch((err) => {
         console.log("spin error : " + err);
+        let messageContainer = document.querySelector('.messages');
+        messageContainer.textContent = "Une erreur s'est produit lors de l'échange avec l'API de Spin. Vérifiez la disponibilité du service ou votre clef API."
+
       });
+
     ret.push(spinnedData);
     i++; // on incrémente le compteur
   }
@@ -68,7 +72,6 @@ async function get_existing_traduction_files(nomBlog, options) {
     let response = await fetch("/get_existing_files/" + nomBlog, {
       ...options,
     });
-    if(response.ok){
 
       let data = await response.json();
       let selectOptions =
@@ -78,9 +81,7 @@ async function get_existing_traduction_files(nomBlog, options) {
         selectOptions += `<option value="${value[0]}" data-txt="${value[1]}">${key}</option>`;
       }
       existingFiles.innerHTML = selectOptions;
-    } else {
-      console.log('une erreur est survenue dans le fetch : ' + response)
-    }
+  
   } catch (error) {
     console.log(error);
   }
@@ -120,7 +121,6 @@ async function end_process(makeCsvFileProgressTag, spiderContainer, clean_spinne
       ...options,
       body: JSON.stringify(clean_spinned_array),
     });
-    if (response.ok) {
       let data = await response.json();
       makeCsvFileProgressTag.innerHTML = `<span class="font-weight-bold alert text-success m-3"><i class="fa-solid fa-check"></i> Création du fichier d'export csv réussi</span>`;
       spiderContainer.classList.remove("web"); // on retire la class qui fait apparaitre l'animation de l'araignée
@@ -131,14 +131,20 @@ async function end_process(makeCsvFileProgressTag, spiderContainer, clean_spinne
       } else {
         spiderContainer.innerHTML = `<div class="resultApi">Spinnerman a terminé vos spins ! Téléchargez les : <button class=" btn btn-lg btn-primary mt-3 allWaButton"><a class="text-white" href="/assets/uploads/spins/${data}.csv">lot beem anglais</a></butyon> <button class=" btn btn-lg btn-primary mt-3 allWaButton"><a class="text-white" href="/assets/uploads/listes/${data}.txt" download target="_blank">La liste de vos titres traduits</a></butyon> </div> <img class="congrats" src="/assets/img/spinnerman/araignee_souriante.png">`;
       }
-    } else {
-      console.log("une erreur est survenue avec le fetch : " + response);
-    }
   } catch (error) {
     console.log(error);
   }
 }
 
+/**
+ * 
+ * @param {HTMLBodyElement} spiderContainer le contenainer des animations de l'araignée et des resultats de fin de traitement
+ * @param {HTMLBodyElement} translateProgress le container d'état de progression de la traduction
+ * @param {HTMLBodyElement} spinProgress le container d'état de progression du spin
+ * @param {HTMLBodyElement} makeFileProgress le container d'état de progression de création du fichier de sortie
+ * @param {HTMLBodyElement} nomBlog input text du nom du blog
+ * @param {object} options objet option qui nous servira de base pour les appels fetch
+ */
 async function runSpinnerman(spiderContainer, translateProgress, spinProgress, makeFileProgress, nomBlog, options) {
   //On ajoute la class web au spidercontainer pour que les règles css fassent apparaitre l'animation de l'araignée
   spiderContainer.classList.add("web");
@@ -149,11 +155,10 @@ async function runSpinnerman(spiderContainer, translateProgress, spinProgress, m
       ...options,
       body: JSON.stringify(xml),
     });
-    if (response.ok) {
       let data = await response.json();
       translateProgress.innerHTML = `<span class="font-weight-bold alert text-success m-3"><i class="fa-solid fa-check"></i> Traduction Terminée</span>`;
       spinProgress.innerHTML = `<span class="font-weight-bold m-3">Spin en cours ...</span>`;
-      try {
+      
         let spin = await spinData(data, options, spinProgress);
         let clean_spinned_array = clean_data(spin);
         spinProgress.innerHTML = `<span class="font-weight-bold alert text-success m-3"><i class="fa-solid fa-check"></i> Spin Terminé</span>`;
@@ -165,13 +170,10 @@ async function runSpinnerman(spiderContainer, translateProgress, spinProgress, m
           nomBlog,
           options
         );
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      console.log("erreur dans la réponse : " + response);
-    }
   } catch (err) {
     console.log(err);
+    let messageContainer = document.querySelector('.messages');
+    messageContainer.textContent = "Une erreur s'est produit lors de l'échange avec l'API de traduction. Vérifiez la disponibilité du service ou votre clef API."
+
   }
 }

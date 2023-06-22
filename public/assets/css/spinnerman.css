@@ -55,3 +55,8 @@ flex-direction: column;}
 }
 
 /************************************************/
+.messages{
+    background: #ff000070;
+    color: white;
+    text-align: center;
+}
